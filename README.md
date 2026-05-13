@@ -48,7 +48,7 @@ AutoRent is a modern, comprehensive car rental platform built with Laravel. It f
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/iqbalmusyaffa/websewamobil.git
    cd websewamobil
    ```
 
