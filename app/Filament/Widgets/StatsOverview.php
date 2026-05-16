@@ -33,6 +33,11 @@ class StatsOverview extends StatsOverviewWidget
                 ->description('Mobil mencapai batas Odometer')
                 ->descriptionIcon('heroicon-m-exclamation-triangle')
                 ->color($carsNeedingService > 0 ? 'danger' : 'success'),
+
+            Stat::make('Rata-rata Penilaian', number_format(\App\Models\Review::avg('rating') ?? 0, 1) . ' / 5.0')
+                ->description(\App\Models\Review::count() . ' Ulasan masuk')
+                ->descriptionIcon('heroicon-m-star')
+                ->color('warning'),
         ];
     }
 }

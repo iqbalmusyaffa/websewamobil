@@ -20,6 +20,46 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <!-- Notifications Dropdown -->
+                <x-dropdown align="right" width="80">
+                    <x-slot name="trigger">
+                        <button class="relative inline-flex items-center p-2 border border-transparent text-sm leading-4 font-medium rounded-full text-gray-500 bg-white hover:text-gray-700 hover:bg-slate-50 focus:outline-none transition ease-in-out duration-150 me-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                            @if(auth()->user()->unreadNotifications->count() > 0)
+                                <span class="absolute top-1 right-1 flex h-3 w-3">
+                                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                  <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                </span>
+                            @endif
+                        </button>
+                    </x-slot>
+
+                    <x-slot name="content">
+                        <div class="block px-4 py-2 text-xs text-gray-400 font-semibold border-b border-slate-100 flex justify-between items-center">
+                            <span>Notifikasi</span>
+                            @if(auth()->user()->unreadNotifications->count() > 0)
+                            <form action="{{ route('notifications.read-all') }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" class="text-sky-600 hover:text-sky-800 text-xs">Tandai sudah dibaca</button>
+                            </form>
+                            @endif
+                        </div>
+                        <div class="max-h-96 overflow-y-auto">
+                            @forelse(auth()->user()->notifications as $notification)
+                                <a href="{{ $notification->data['url'] ?? '#' }}" class="block px-4 py-3 border-b border-slate-50 hover:bg-slate-50 transition {{ $notification->unread() ? 'bg-sky-50' : '' }}">
+                                    <p class="text-sm font-semibold text-slate-800">{{ $notification->data['title'] ?? 'Info' }}</p>
+                                    <p class="text-xs text-slate-500 mt-0.5 line-clamp-2">{{ $notification->data['message'] ?? '' }}</p>
+                                    <p class="text-[10px] text-slate-400 mt-1">{{ $notification->created_at->diffForHumans() }}</p>
+                                </a>
+                            @empty
+                                <div class="px-4 py-6 text-center text-sm text-slate-500">
+                                    Belum ada notifikasi
+                                </div>
+                            @endforelse
+                        </div>
+                    </x-slot>
+                </x-dropdown>
+
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">

@@ -122,6 +122,25 @@ class Booking extends Model
         return $this->hasMany(VehicleInspection::class);
     }
 
+    public function extensions()
+    {
+        return $this->hasMany(BookingExtension::class);
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(\App\Models\Branch::class);
+    }
+
+    /**
+     * Check apakah booking bisa diperpanjang
+     */
+    public function canExtend(): bool
+    {
+        return in_array($this->status, ['disetujui', 'berjalan'])
+            && !$this->extensions()->where('status', 'pending')->exists();
+    }
+
     public function cancelledByAdmin()
     {
         return $this->belongsTo(User::class, 'cancelled_by_user_id');
@@ -244,8 +263,14 @@ class Booking extends Model
      */
     public function canCancel(): bool
     {
+        // Jika start_date sudah lewat, tidak bisa dibatalkan
+        if (now()->gte($this->start_date)) {
+            return false;
+        }
+        $cutoff = $this->cancel_cutoff_hours ?? 24;
+        // diffInHours tanpa parameter kedua (default absolute=true) selalu return nilai positif
         $hoursUntilPickup = now()->diffInHours($this->start_date);
-        return $hoursUntilPickup > $this->cancel_cutoff_hours;
+        return $hoursUntilPickup > $cutoff;
     }
 
     /**

@@ -19,11 +19,58 @@
                 <a href="{{ route('profile.edit') }}" class="inline-flex items-center px-4 py-2 border border-slate-300 rounded-lg shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors">
                     Edit Profil
                 </a>
+                <a href="{{ route('activity-log') }}" class="inline-flex items-center px-4 py-2 border border-slate-300 rounded-lg shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors">
+                    Log Aktivitas
+                </a>
             </div>
         </div>
 
+        @if(session('error'))
+        <div class="mb-6 p-4 bg-red-50 text-red-700 border border-red-200 rounded-2xl flex items-start gap-3">
+            <svg class="w-6 h-6 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            <div>
+                <h4 class="font-bold">Perhatian</h4>
+                <p class="text-sm mt-1">{{ session('error') }}</p>
+            </div>
+        </div>
+        @endif
+
+        @php
+            $unpaidPenalties = auth()->user()->penalties()->where('status', 'unpaid')->get();
+        @endphp
+        @if($unpaidPenalties->isNotEmpty())
+        <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-2xl shadow-sm">
+            <div class="flex items-start gap-4">
+                <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-red-800 font-bold text-lg">Tagihan Denda Belum Dibayar</h3>
+                    <p class="text-red-700 mt-1 text-sm">Anda memiliki tagihan denda atau kerusakan yang belum diselesaikan. Anda tidak dapat membuat pesanan baru sebelum melunasinya.</p>
+                    
+                    <div class="mt-4 space-y-3">
+                        @foreach($unpaidPenalties as $penalty)
+                        <div class="bg-white p-3 rounded-lg border border-red-100 flex justify-between items-center">
+                            <div>
+                                <p class="font-semibold text-slate-800">{{ $penalty->reason }}</p>
+                                @if($penalty->booking_id)
+                                    <p class="text-xs text-slate-500 mt-1">Terkait Pesanan: #{{ $penalty->booking_id }}</p>
+                                @endif
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-red-600 text-lg">Rp {{ number_format($penalty->amount, 0, ',', '.') }}</p>
+                                <p class="text-xs text-slate-500">Hubungi Admin untuk pelunasan</p>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
         <!-- Stats -->
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5 mb-8">
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
             <!-- Active Bookings -->
             <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-slate-100">
                 <div class="p-6">
@@ -126,6 +173,37 @@
                     <div class="text-sm text-slate-500">
                         {{ $completedBookingsCount > 0 ? 'Dari ' . $completedBookingsCount . ' perjalanan' : 'Belum ada rating' }}
                     </div>
+                </div>
+            </div>
+
+            <!-- Wallet -->
+            <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-slate-100">
+                <div class="p-6">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 bg-blue-100 rounded-xl p-3">
+                            <svg class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                            </svg>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-slate-500 truncate">Saldo Wallet</dt>
+                                <dd class="flex items-baseline">
+                                    <div class="text-lg font-extrabold text-slate-900">Rp {{ number_format(auth()->user()->wallet_balance ?? 0, 0, ',', '.') }}</div>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-50 px-6 py-3 flex justify-between items-center">
+                    <div class="text-sm text-slate-500">
+                        Bisa dipakai untuk sewa
+                    </div>
+                    @if(auth()->user()->wallet_balance >= 100000)
+                    <button type="button" x-data="" x-on:click.prevent="$dispatch('open-modal', 'withdraw-modal')" class="text-sm font-medium text-sky-600 hover:text-sky-500">Tarik Saldo</button>
+                    @else
+                    <button type="button" onclick="alert('Saldo minimal untuk penarikan adalah Rp 100.000')" class="text-sm font-medium text-slate-400 cursor-not-allowed">Tarik Saldo</button>
+                    @endif
                 </div>
             </div>
 
@@ -458,3 +536,47 @@
     </div>
 </div>
 </x-front-layout>
+
+<!-- Withdraw Modal -->
+<x-modal name="withdraw-modal" :show="$errors->has('bank_account_number')">
+    <form method="POST" action="{{ route('wallet.withdraw') }}" class="p-6">
+        @csrf
+        <h2 class="text-lg font-bold text-slate-900 mb-4">Tarik Saldo Wallet</h2>
+        <p class="text-sm text-slate-600 mb-6">Penarikan saldo minimal Rp 100.000. Dana akan ditransfer ke rekening Anda dalam waktu 1x24 jam kerja.</p>
+
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Nominal Penarikan</label>
+                <input type="number" name="amount" min="100000" max="{{ auth()->user()->wallet_balance }}" required
+                    class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 transition text-sm py-2.5 px-3">
+                @error('amount') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+            
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Bank (Misal: BCA, Mandiri, BNI)</label>
+                <input type="text" name="bank_name" required
+                    class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 transition text-sm py-2.5 px-3">
+                @error('bank_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Atas Nama Rekening</label>
+                <input type="text" name="account_name" required
+                    class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 transition text-sm py-2.5 px-3">
+                @error('account_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Nomor Rekening</label>
+                <input type="text" name="account_number" required
+                    class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 transition text-sm py-2.5 px-3">
+                @error('account_number') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+            </div>
+        </div>
+
+        <div class="mt-6 flex justify-end gap-3">
+            <button type="button" x-on:click="$dispatch('close')" class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50">Batal</button>
+            <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-sky-600 rounded-lg hover:bg-sky-700">Tarik Sekarang</button>
+        </div>
+    </form>
+</x-modal>

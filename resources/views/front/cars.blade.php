@@ -28,6 +28,30 @@
                             <input id="search" name="search" type="text" value="{{ request('search') }}" class="w-full px-4 py-2.5 rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors text-sm" placeholder="Merek atau nama mobil...">
                         </div>
 
+                        <!-- Ketersediaan Tanggal -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">📅 Cek Ketersediaan</label>
+                            <div class="space-y-2">
+                                <div>
+                                    <label for="available_from" class="text-xs text-slate-500 mb-1 block">Tanggal Mulai</label>
+                                    <input id="available_from" name="available_from" type="date"
+                                        value="{{ request('available_from') }}"
+                                        min="{{ date('Y-m-d') }}"
+                                        class="w-full px-3 py-2 rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 text-sm">
+                                </div>
+                                <div>
+                                    <label for="available_to" class="text-xs text-slate-500 mb-1 block">Tanggal Selesai</label>
+                                    <input id="available_to" name="available_to" type="date"
+                                        value="{{ request('available_to') }}"
+                                        min="{{ date('Y-m-d') }}"
+                                        class="w-full px-3 py-2 rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 text-sm">
+                                </div>
+                            </div>
+                            @if(request('available_from') && request('available_to'))
+                            <p class="text-xs text-emerald-600 mt-1 font-medium">✓ Hanya tampil mobil yang tersedia</p>
+                            @endif
+                        </div>
+
                         <!-- Type -->
                         <div>
                             <label for="type" class="block text-sm font-semibold text-slate-700 mb-2">Tipe Mobil</label>
@@ -44,31 +68,86 @@
                         <!-- Transmission -->
                         <div>
                             <label for="transmission" class="block text-sm font-semibold text-slate-700 mb-2">Transmisi</label>
-                            <select id="transmission" name="transmission" class="w-full px-4 py-2.5 rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors text-sm">
-                                <option value="">Semua Transmisi</option>
-                                <option value="AT" {{ request('transmission') == 'AT' ? 'selected' : '' }}>Otomatis (AT)</option>
-                                <option value="MT" {{ request('transmission') == 'MT' ? 'selected' : '' }}>Manual (MT)</option>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="flex items-center gap-2 px-3 py-2 rounded-xl border cursor-pointer transition
+                                    {{ request('transmission') == 'AT' ? 'border-sky-500 bg-sky-50 text-sky-700' : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
+                                    <input type="radio" name="transmission" value="AT" {{ request('transmission') == 'AT' ? 'checked' : '' }} class="sr-only">
+                                    <span class="text-xs font-bold">⚙️ Matic</span>
+                                </label>
+                                <label class="flex items-center gap-2 px-3 py-2 rounded-xl border cursor-pointer transition
+                                    {{ request('transmission') == 'MT' ? 'border-sky-500 bg-sky-50 text-sky-700' : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100' }}">
+                                    <input type="radio" name="transmission" value="MT" {{ request('transmission') == 'MT' ? 'checked' : '' }} class="sr-only">
+                                    <span class="text-xs font-bold">🔧 Manual</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Bahan Bakar -->
+                        <div>
+                            <label for="fuel_type" class="block text-sm font-semibold text-slate-700 mb-2">⛽ Bahan Bakar</label>
+                            <select id="fuel_type" name="fuel_type" class="w-full px-4 py-2.5 rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors text-sm">
+                                <option value="">Semua BBM</option>
+                                <option value="Bensin" {{ request('fuel_type') == 'Bensin' ? 'selected' : '' }}>⛽ Bensin</option>
+                                <option value="Diesel" {{ request('fuel_type') == 'Diesel' ? 'selected' : '' }}>🛢️ Diesel</option>
+                                <option value="Hybrid" {{ request('fuel_type') == 'Hybrid' ? 'selected' : '' }}>🌿 Hybrid</option>
+                                <option value="Listrik" {{ request('fuel_type') == 'Listrik' ? 'selected' : '' }}>⚡ Listrik</option>
                             </select>
                         </div>
 
                         <!-- Capacity -->
                         <div>
-                            <label for="capacity" class="block text-sm font-semibold text-slate-700 mb-2">Kapasitas Minimum</label>
+                            <label for="capacity" class="block text-sm font-semibold text-slate-700 mb-2">👥 Kapasitas Minimum</label>
                             <select id="capacity" name="capacity" class="w-full px-4 py-2.5 rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors text-sm">
                                 <option value="">Pilih Kapasitas</option>
-                                <option value="4" {{ request('capacity') == '4' ? 'selected' : '' }}>4 Penumpang</option>
-                                <option value="6" {{ request('capacity') == '6' ? 'selected' : '' }}>6 Penumpang</option>
+                                <option value="2" {{ request('capacity') == '2' ? 'selected' : '' }}>2+ Penumpang</option>
+                                <option value="4" {{ request('capacity') == '4' ? 'selected' : '' }}>4+ Penumpang</option>
+                                <option value="6" {{ request('capacity') == '6' ? 'selected' : '' }}>6+ Penumpang</option>
                                 <option value="8" {{ request('capacity') == '8' ? 'selected' : '' }}>8+ Penumpang</option>
                             </select>
                         </div>
 
+                        <!-- Rating Minimum -->
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">⭐ Rating Minimum</label>
+                            <div class="flex gap-1">
+                                @for($star = 1; $star <= 5; $star++)
+                                <label class="flex-1 text-center cursor-pointer">
+                                    <input type="radio" name="min_rating" value="{{ $star }}" {{ request('min_rating') == $star ? 'checked' : '' }} class="sr-only">
+                                    <span class="block py-1.5 rounded-lg text-lg transition border
+                                        {{ request('min_rating') == $star ? 'border-amber-400 bg-amber-50' : 'border-slate-200 bg-slate-50 hover:bg-amber-50' }}">
+                                        ⭐
+                                    </span>
+                                    <span class="text-[10px] text-slate-500 font-medium">{{ $star }}+</span>
+                                </label>
+                                @endfor
+                            </div>
+                        </div>
+
+                        <!-- Rentang Harga -->
+                        <div x-data="{ priceMin: {{ request('price_min', 0) }}, priceMax: {{ request('price_max', $priceMax ?? 2000000) }}, max: {{ $priceMax ?? 2000000 }} }">
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">💰 Rentang Harga /hari</label>
+                            <div class="flex items-center gap-2 mb-3 text-xs text-slate-600">
+                                <span>Rp <span x-text="new Intl.NumberFormat('id-ID').format(priceMin)"></span></span>
+                                <span class="flex-1 text-center text-slate-400">—</span>
+                                <span>Rp <span x-text="new Intl.NumberFormat('id-ID').format(priceMax)"></span></span>
+                            </div>
+                            <input type="range" x-model="priceMin" min="0" :max="max" step="50000"
+                                class="w-full h-1.5 bg-slate-200 rounded-lg accent-sky-500 mb-1">
+                            <input type="range" x-model="priceMax" min="0" :max="max" step="50000"
+                                class="w-full h-1.5 bg-slate-200 rounded-lg accent-sky-500">
+                            <input type="hidden" name="price_min" :value="priceMin">
+                            <input type="hidden" name="price_max" :value="priceMax">
+                        </div>
+
                         <!-- Sort -->
                         <div>
-                            <label for="sort" class="block text-sm font-semibold text-slate-700 mb-2">Urutkan Berdasarkan</label>
+                            <label for="sort" class="block text-sm font-semibold text-slate-700 mb-2">🔃 Urutkan</label>
                             <select id="sort" name="sort" class="w-full px-4 py-2.5 rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors text-sm">
                                 <option value="">Terbaru</option>
                                 <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Harga Terendah</option>
                                 <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Harga Tertinggi</option>
+                                <option value="rating" {{ request('sort') == 'rating' ? 'selected' : '' }}>⭐ Rating Tertinggi</option>
+                                <option value="popular" {{ request('sort') == 'popular' ? 'selected' : '' }}>🔥 Terpopuler</option>
                             </select>
                         </div>
 

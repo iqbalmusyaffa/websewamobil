@@ -22,4 +22,9 @@ class Review extends Model
     {
         return $this->belongsTo(Car::class);
     }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
 }

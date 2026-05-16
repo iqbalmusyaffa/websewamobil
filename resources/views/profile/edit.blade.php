@@ -59,22 +59,22 @@
                                 <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,100 L100,0 L100,10 L0,110 Z M0,80 L100,-20 L100,-10 L0,90 Z" fill="currentColor"/></svg>
                             </div>
 
-                            <div class="relative z-10 h-full p-5 flex flex-col justify-between text-white">
+                            <div class="relative z-10 h-full flex flex-col justify-between text-white">
                                 <!-- Top: Brand & Tier -->
-                                <div class="flex justify-between items-start">
+                                <div class="flex justify-between items-start pt-6 px-6">
                                     <div class="flex items-center gap-1.5">
                                         <div class="w-6 h-6 bg-white text-{{ auth()->user()->member_tier === 'gold' ? 'yellow-600' : (auth()->user()->member_tier === 'silver' ? 'slate-600' : 'sky-700') }} rounded flex items-center justify-center">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
                                         </div>
                                         <span class="text-sm font-extrabold tracking-tight">Auto<span class="text-white/80">Rent</span></span>
                                     </div>
-                                    <div class="text-xs font-black uppercase tracking-widest px-2 py-0.5 rounded {{ auth()->user()->member_tier === 'platinum' ? 'bg-white/10 text-white' : (auth()->user()->member_tier === 'gold' ? 'bg-black/20 text-yellow-50' : (auth()->user()->member_tier === 'silver' ? 'bg-black/20 text-white' : 'bg-white/20 text-white')) }}">
+                                    <div class="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-md leading-none flex items-center justify-center {{ auth()->user()->member_tier === 'platinum' ? 'bg-white/10 text-white' : (auth()->user()->member_tier === 'gold' ? 'bg-black/20 text-yellow-50' : (auth()->user()->member_tier === 'silver' ? 'bg-black/20 text-white' : 'bg-white/20 text-white')) }}">
                                         {{ auth()->user()->member_tier }}
                                     </div>
                                 </div>
 
                                 <!-- Middle: Chip & ID -->
-                                <div>
+                                <div class="px-6">
                                     <div class="w-10 h-8 rounded bg-gradient-to-br from-yellow-200 to-yellow-400 mb-2 opacity-80 border border-yellow-500/50"></div>
                                     <div class="font-mono text-lg tracking-widest opacity-90 drop-shadow-md">
                                         {{ substr(str_pad(auth()->user()->id, 12, '0', STR_PAD_LEFT), 0, 4) }} 
@@ -84,14 +84,14 @@
                                 </div>
 
                                 <!-- Bottom: Name & Member Since -->
-                                <div class="flex justify-between items-end drop-shadow-md">
+                                <div class="flex justify-between items-end drop-shadow-md pb-6 px-6">
                                     <div>
                                         <div class="text-[9px] uppercase tracking-wider opacity-70 mb-0.5">MEMBER NAME</div>
-                                        <div class="font-bold text-sm tracking-wide truncate max-w-[180px] uppercase">{{ auth()->user()->name }}</div>
+                                        <div class="font-bold text-sm tracking-wide uppercase pb-0.5 whitespace-nowrap overflow-visible">{{ auth()->user()->name }}</div>
                                     </div>
                                     <div class="text-right">
                                         <div class="text-[9px] uppercase tracking-wider opacity-70 mb-0.5">VALID THRU</div>
-                                        <div class="font-mono text-sm tracking-wide">{{ auth()->user()->member_valid_thru ? auth()->user()->member_valid_thru->format('m/y') : auth()->user()->created_at->addYears(5)->format('m/y') }}</div>
+                                        <div class="font-mono text-sm tracking-wide pb-0.5">{{ auth()->user()->member_valid_thru ? auth()->user()->member_valid_thru->format('m/y') : auth()->user()->created_at->addYears(5)->format('m/y') }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -285,13 +285,32 @@
         const originalTransform = card.style.transform;
         card.style.transform = 'none';
 
+        // Fix for html2canvas aspect-ratio & bounding box calculation issues
+        const rect = card.getBoundingClientRect();
+        const originalWidth = card.style.width;
+        const originalHeight = card.style.height;
+        
+        // Lock the exact pixel dimensions before capture
+        card.style.width = rect.width + 'px';
+        card.style.height = rect.height + 'px';
+
         html2canvas(card, {
             scale: 3, // High resolution
             useCORS: true,
-            backgroundColor: null
+            backgroundColor: null,
+            logging: false,
+            onclone: function(clonedDoc) {
+                // Additional safety: explicitly remove truncate in clone if any exists
+                const clonedCard = clonedDoc.getElementById('member-card-element');
+                if (clonedCard) {
+                    clonedCard.style.transform = 'none';
+                }
+            }
         }).then(canvas => {
-            // Restore transform
+            // Restore transform and dimensions
             card.style.transform = originalTransform;
+            card.style.width = originalWidth;
+            card.style.height = originalHeight;
 
             if (format === 'png') {
                 const link = document.createElement('a');

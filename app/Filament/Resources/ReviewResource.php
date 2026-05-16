@@ -34,10 +34,35 @@ class ReviewResource extends Resource
             Forms\Components\Select::make('car_id')
                 ->relationship('car', 'name')
                 ->searchable(),
+            Forms\Components\Select::make('branch_id')
+                ->relationship('branch', 'name')
+                ->searchable(),
             Forms\Components\Select::make('rating')
+                ->label('Rating Umum')
                 ->options([1=>'⭐ 1', 2=>'⭐⭐ 2', 3=>'⭐⭐⭐ 3', 4=>'⭐⭐⭐⭐ 4', 5=>'⭐⭐⭐⭐⭐ 5'])
                 ->required(),
             Forms\Components\Textarea::make('comment')->columnSpanFull(),
+            \Filament\Schemas\Components\Fieldset::make('Kuesioner Cabang')
+                ->schema([
+                    Forms\Components\Select::make('service_rating')
+                        ->label('Pelayanan')
+                        ->options([1=>'1', 2=>'2', 3=>'3', 4=>'4', 5=>'5']),
+                    Forms\Components\Select::make('friendliness_rating')
+                        ->label('Keramahan Staf')
+                        ->options([1=>'1', 2=>'2', 3=>'3', 4=>'4', 5=>'5']),
+                ])->columns(2),
+            \Filament\Schemas\Components\Fieldset::make('Kuesioner Mobil')
+                ->schema([
+                    Forms\Components\Select::make('cleanliness_rating')
+                        ->label('Kebersihan')
+                        ->options([1=>'1', 2=>'2', 3=>'3', 4=>'4', 5=>'5']),
+                    Forms\Components\Select::make('comfort_rating')
+                        ->label('Kenyamanan')
+                        ->options([1=>'1', 2=>'2', 3=>'3', 4=>'4', 5=>'5']),
+                    Forms\Components\Select::make('car_condition_rating')
+                        ->label('Kondisi Mesin')
+                        ->options([1=>'1', 2=>'2', 3=>'3', 4=>'4', 5=>'5']),
+                ])->columns(3),
         ]);
     }
 
@@ -47,9 +72,15 @@ class ReviewResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')->label('Pengguna')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('car.name')->label('Mobil')->searchable(),
-                Tables\Columns\TextColumn::make('rating')->label('Rating')
+                Tables\Columns\TextColumn::make('branch.name')->label('Cabang')->searchable(),
+                Tables\Columns\TextColumn::make('rating')->label('Rating Umum')
                     ->formatStateUsing(fn ($state) => str_repeat('⭐', $state))
                     ->sortable(),
+                Tables\Columns\TextColumn::make('service_rating')->label('Layanan')->numeric()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('friendliness_rating')->label('Keramahan')->numeric()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('cleanliness_rating')->label('Kebersihan')->numeric()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('comfort_rating')->label('Kenyamanan')->numeric()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('car_condition_rating')->label('Kond. Mesin')->numeric()->sortable()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('comment')->label('Komentar')->limit(50),
                 Tables\Columns\TextColumn::make('created_at')->label('Tanggal')->dateTime('d M Y')->sortable(),
             ])

@@ -23,7 +23,7 @@ class Branch extends Model
 
     public function reviews()
     {
-        return $this->hasMany(BranchReview::class);
+        return $this->hasMany(Review::class);
     }
 
     public function scopeActive($query)

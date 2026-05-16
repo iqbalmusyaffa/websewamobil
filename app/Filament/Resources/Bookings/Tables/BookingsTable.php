@@ -102,6 +102,46 @@ class BookingsTable
                     ->color('success')
                     ->url(fn (\App\Models\Booking $record) => route('admin.invoice.download', $record))
                     ->openUrlInNewTab(),
+                \Filament\Tables\Actions\Action::make('kembalikan_deposit')
+                    ->label('Kembalikan Deposit')
+                    ->icon('heroicon-o-wallet')
+                    ->color('warning')
+                    ->requiresConfirmation()
+                    ->modalHeading('Kembalikan Deposit ke Saldo (Wallet) Pengguna')
+                    ->modalDescription('Apakah Anda yakin ingin mengembalikan deposit uang jaminan ini ke Saldo Wallet pengguna?')
+                    ->form([
+                        \Filament\Forms\Components\TextInput::make('refund_amount')
+                            ->label('Nominal yang Dikembalikan')
+                            ->numeric()
+                            ->required()
+                            ->default(fn (\App\Models\Booking $record) => $record->deposit_amount)
+                            ->maxValue(fn (\App\Models\Booking $record) => $record->deposit_amount)
+                            ->prefix('Rp')
+                            ->helperText('Anda bisa mengurangi nominal jika ada kerusakan.'),
+                        \Filament\Forms\Components\Textarea::make('notes')
+                            ->label('Catatan Tambahan (Opsional)')
+                    ])
+                    ->action(function (\App\Models\Booking $record, array $data) {
+                        $amount = (float) $data['refund_amount'];
+                        $user = $record->user;
+                        
+                        if ($amount > 0 && $user) {
+                            $user->wallet_balance += $amount;
+                            $user->save();
+                        }
+                        
+                        $record->update([
+                            'deposit_status' => 'refunded',
+                            'deposit_refund_date' => now(),
+                        ]);
+                        
+                        \Filament\Notifications\Notification::make()
+                            ->title('Deposit Berhasil Dikembalikan')
+                            ->body("Nominal Rp " . number_format($amount, 0, ',', '.') . " telah ditambahkan ke Wallet pengguna.")
+                            ->success()
+                            ->send();
+                    })
+                    ->visible(fn (\App\Models\Booking $record) => $record->deposit_amount > 0 && in_array($record->deposit_status, ['pending', 'held']) && in_array($record->status, ['selesai', 'dibatalkan'])),
                 EditAction::make(),
             ])
             ->toolbarActions([

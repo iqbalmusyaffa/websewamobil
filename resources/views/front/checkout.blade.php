@@ -18,6 +18,8 @@
                     checkingPromo: false,
                     availabilityChecking: false,
                     availabilityData: null,
+                    pickupMode: 'home_delivery',
+                    selectedBranchId: '',
                     get days() {
                         if (!this.startDate || !this.endDate) return 0;
                         const start = new Date(this.startDate);
@@ -29,7 +31,22 @@
                         return diffDays > 0 ? diffDays : 1;
                     },
                     get dailyPrice() { return this.withDriver ? this.priceWithDriver : this.priceWithoutDriver; },
-                    get basePrice() { return this.days * this.dailyPrice; },
+                    get basePrice() {
+                        if (this.days <= 0 || !this.startDate) return 0;
+                        let total = 0;
+                        let d = new Date(this.startDate);
+                        for (let i = 0; i < this.days; i++) {
+                            const dayOfWeek = d.getDay();
+                            // +15% untuk Weekend (Sabtu & Minggu)
+                            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                                total += this.dailyPrice * 1.15;
+                            } else {
+                                total += this.dailyPrice;
+                            }
+                            d.setDate(d.getDate() + 1);
+                        }
+                        return total;
+                    },
                     get addonTotal() {
                         return Object.values(this.addonPrices).reduce((a, b) => a + b, 0) * this.days;
                     },
@@ -59,7 +76,14 @@
                         const maxPointsToUse = Math.min(this.memberPoints, Math.floor(currentTotal / 100));
                         return maxPointsToUse * 100;
                     },
-                    get totalPrice() { return Math.max(0, this.basePrice + this.addonTotal - this.discountAmount - this.tierDiscountAmount - this.pointsDiscountAmount); },
+                    useWallet: false,
+                    walletBalance: {{ auth()->user()->wallet_balance ?? 0 }},
+                    get walletUsedAmount() {
+                        if (!this.useWallet) return 0;
+                        const sub = Math.max(0, this.basePrice + this.addonTotal - this.discountAmount - this.tierDiscountAmount - this.pointsDiscountAmount);
+                        return Math.min(sub, this.walletBalance);
+                    },
+                    get totalPrice() { return Math.max(0, this.basePrice + this.addonTotal - this.discountAmount - this.tierDiscountAmount - this.pointsDiscountAmount - this.walletUsedAmount); },
                     toggleAddon(id, price) {
                         if (this.addonPrices[id] !== undefined) {
                             delete this.addonPrices[id];
@@ -236,46 +260,121 @@
                                 </div>
                             </div>
 
+                            <div class="border-t border-slate-200 my-6"></div>
+
+                            {{-- SECTION: Mode Pengambilan --}}
                             <div class="mt-4">
-                                <label class="block text-sm font-semibold text-slate-700 mb-2">Lokasi Penjemputan</label>
+                                <label class="block text-sm font-bold text-slate-900 mb-3">
+                                    <span x-text="withDriver ? '📍 Lokasi Penjemputan Sopir' : '🚗 Mode Pengambilan Kendaraan'"></span> <span class="text-red-500">*</span>
+                                </label>
 
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
-                                    <div>
-                                        <select x-model="selectedProvinceId" @change="fetchRegencies" required class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 transition text-sm py-2.5 px-3">
-                                            <option value="" disabled>Pilih Provinsi</option>
-                                            <template x-for="prov in provinces" :key="prov.id">
-                                                <option :value="prov.id" x-text="prov.name"></option>
-                                            </template>
-                                        </select>
+                                    {{-- Toggle Pilihan Mode --}}
+                                    <div class="grid grid-cols-2 gap-3 mb-4">
+                                        {{-- Opsi 1: Ambil di Cabang --}}
+                                        <div @click="pickupMode = 'pickup_branch'"
+                                            class="flex flex-col items-center gap-2 p-4 rounded-xl border-2 cursor-pointer transition"
+                                            :class="pickupMode === 'pickup_branch' ? 'border-sky-500 bg-sky-50' : 'border-slate-200 bg-white hover:border-slate-300'">
+                                            <span class="text-2xl">🏢</span>
+                                            <div class="text-center">
+                                                <p class="font-bold text-slate-900 text-sm" x-text="withDriver ? 'Jemput di Cabang' : 'Ambil di Cabang'"></p>
+                                                <p class="text-xs text-slate-500 mt-0.5" x-text="withDriver ? 'Datang ke cabang kami' : 'Datang ke cabang kami'"></p>
+                                            </div>
+                                            <span x-show="pickupMode === 'pickup_branch'" class="text-xs font-bold text-sky-600 bg-sky-100 px-2 py-0.5 rounded-full">✓ Dipilih</span>
+                                        </div>
+
+                                        {{-- Opsi 2: Antar ke Alamat --}}
+                                        <div @click="pickupMode = 'home_delivery'"
+                                            class="flex flex-col items-center gap-2 p-4 rounded-xl border-2 cursor-pointer transition"
+                                            :class="pickupMode === 'home_delivery' ? 'border-emerald-500 bg-emerald-50' : 'border-slate-200 bg-white hover:border-slate-300'">
+                                            <span class="text-2xl" x-text="withDriver ? '📍' : '🏠'"></span>
+                                            <div class="text-center">
+                                                <p class="font-bold text-slate-900 text-sm" x-text="withDriver ? 'Jemput di Alamat Saya' : 'Antar ke Alamat Saya'"></p>
+                                                <p class="text-xs text-slate-500 mt-0.5" x-text="withDriver ? 'Sopir menjemput di lokasi Anda' : 'Diantar ke lokasi Anda'"></p>
+                                            </div>
+                                            <span x-show="pickupMode === 'home_delivery'" class="text-xs font-bold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full">✓ Dipilih</span>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <select x-model="selectedRegencyId" @change="fetchDistricts" :disabled="regencies.length === 0" required class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 transition text-sm py-2.5 px-3 disabled:opacity-50">
-                                            <option value="" disabled>Pilih Kabupaten/Kota</option>
-                                            <template x-for="reg in regencies" :key="reg.id">
-                                                <option :value="reg.id" x-text="reg.name"></option>
-                                            </template>
-                                        </select>
+                                    <input type="hidden" name="pickup_mode" :value="pickupMode">
+
+                                    {{-- Panel: Ambil di Cabang --}}
+                                    <div x-show="pickupMode === 'pickup_branch'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0">
+                                        <label class="block text-sm font-semibold text-slate-700 mb-2">📍 Pilih Cabang</label>
+                                        <div class="space-y-2">
+                                            @forelse($branches as $branch)
+                                            <label class="flex items-center gap-3 p-3 border-2 rounded-xl cursor-pointer transition"
+                                                :class="selectedBranchId == '{{ $branch->id }}' ? 'border-sky-500 bg-sky-50' : 'border-slate-200 hover:border-slate-300'">
+                                                <input type="radio" name="branch_id" value="{{ $branch->id }}"
+                                                    x-model="selectedBranchId"
+                                                    class="w-4 h-4 text-sky-600 border-slate-300 focus:ring-sky-500">
+                                                <div class="flex-1 min-w-0">
+                                                    <p class="font-bold text-slate-900 text-sm">{{ $branch->name }}</p>
+                                                    <p class="text-xs text-slate-500 truncate">📍 {{ $branch->address }}</p>
+                                                    @if($branch->phone)
+                                                    <p class="text-xs text-sky-600">📞 {{ $branch->phone }}</p>
+                                                    @endif
+                                                </div>
+                                            </label>
+                                            @empty
+                                            <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
+                                                ⚠️ Belum ada cabang tersedia. Silakan pilih mode antar ke alamat.
+                                            </div>
+                                            @endforelse
+                                        </div>
+                                        @error('branch_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                                     </div>
-                                    <div>
-                                        <select x-model="selectedDistrictId" @change="updateDistrictName" :disabled="districts.length === 0" required class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 transition text-sm py-2.5 px-3 disabled:opacity-50">
-                                            <option value="" disabled>Pilih Kecamatan</option>
-                                            <template x-for="dist in districts" :key="dist.id">
-                                                <option :value="dist.id" x-text="dist.name"></option>
-                                            </template>
-                                        </select>
+
+                                    {{-- Panel: Antar ke Alamat --}}
+                                    <div x-show="pickupMode === 'home_delivery'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0">
+                                        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 mb-3">
+                                            <p class="text-xs text-emerald-800 font-medium" x-text="withDriver ? '📍 Sopir akan menjemput Anda di alamat yang tertera di bawah ini. Pastikan alamat sudah lengkap dan benar.' : '🏠 Kendaraan akan diantarkan ke alamat rumah Anda. Pastikan alamat sudah lengkap dan benar.'"></p>
+                                        </div>
+                                        <label class="block text-sm font-semibold text-slate-700 mb-2" x-text="withDriver ? 'Alamat Penjemputan' : 'Alamat Pengiriman'"></label>
+
+                                        {{-- Dropdown Wilayah --}}
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                                            <div>
+                                                <select x-model="selectedProvinceId" @change="fetchRegencies" required class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition text-sm py-2.5 px-3">
+                                                    <option value="" disabled>Pilih Provinsi</option>
+                                                    <template x-for="prov in provinces" :key="prov.id">
+                                                        <option :value="prov.id" x-text="prov.name"></option>
+                                                    </template>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <select x-model="selectedRegencyId" @change="fetchDistricts" :disabled="regencies.length === 0" required class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition text-sm py-2.5 px-3 disabled:opacity-50">
+                                                    <option value="" disabled>Pilih Kabupaten/Kota</option>
+                                                    <template x-for="reg in regencies" :key="reg.id">
+                                                        <option :value="reg.id" x-text="reg.name"></option>
+                                                    </template>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <select x-model="selectedDistrictId" @change="updateDistrictName" :disabled="districts.length === 0" required class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition text-sm py-2.5 px-3 disabled:opacity-50">
+                                                    <option value="" disabled>Pilih Kecamatan</option>
+                                                    <template x-for="dist in districts" :key="dist.id">
+                                                        <option :value="dist.id" x-text="dist.name"></option>
+                                                    </template>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <input type="text" x-model="addressDetail"
+                                                placeholder="Alamat Lengkap (Cth: Jl. Melati No. 5 / Blok A)"
+                                                class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition text-sm py-2.5 px-3">
+                                        </div>
+
+                                        {{-- Preview Alamat --}}
+                                        <div x-show="fullAddress" class="mt-2 p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                                            <p class="text-xs font-semibold text-slate-600 mb-1">📍 Alamat yang akan disimpan:</p>
+                                            <p class="text-sm text-slate-800 font-medium" x-text="fullAddress"></p>
+                                        </div>
+
+                                        <input type="hidden" name="delivery_address" :value="fullAddress">
+                                        @error('delivery_address') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                                     </div>
                                 </div>
-
-                                <div>
-                                    <input type="text" x-model="addressDetail" required
-                                        placeholder="Alamat Lengkap (Cth: Jl. Melati No. 5 / Blok A)"
-                                        class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 transition text-sm py-2.5 px-3">
-                                </div>
-
-                                <input type="hidden" name="pickup_location" :value="fullAddress">
-                                @error('pickup_location') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                             </div>
-                        </div>
 
                         <!-- Driver Option -->
                         <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
@@ -413,7 +512,23 @@
                                     <span class="text-slate-400">Tukar Poin</span>
                                     <span class="font-semibold text-emerald-400" x-text="'- ' + formatRupiah(pointsDiscountAmount)"></span>
                                 </div>
+                                <div class="flex justify-between items-center" x-show="walletUsedAmount > 0">
+                                    <span class="text-slate-400">Saldo Wallet</span>
+                                    <span class="font-semibold text-sky-300" x-text="'- ' + formatRupiah(walletUsedAmount)"></span>
+                                </div>
                             </div>
+                            
+                            @if(Auth::check() && Auth::user()->wallet_balance > 0)
+                            <div class="mb-5 pt-4 border-t border-slate-700">
+                                <label class="flex items-center justify-between cursor-pointer group">
+                                    <div class="flex items-center gap-2">
+                                        <input type="checkbox" name="use_wallet" value="1" x-model="useWallet" class="w-4 h-4 rounded border-slate-600 bg-slate-800 text-sky-500 focus:ring-sky-500">
+                                        <span class="text-sm font-medium text-slate-300 group-hover:text-white transition">Gunakan Wallet</span>
+                                    </div>
+                                    <span class="text-sm font-bold text-sky-400">Rp {{ number_format(Auth::user()->wallet_balance, 0, ',', '.') }}</span>
+                                </label>
+                            </div>
+                            @endif
                             <div class="border-t border-slate-700 pt-4 mb-6">
                                 <div class="flex justify-between items-center">
                                     <span class="text-white font-bold text-lg">Total</span>

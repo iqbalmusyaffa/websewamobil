@@ -11,6 +11,40 @@
             <p class="text-slate-600">Upload KTP dan SIM Anda untuk verifikasi identitas</p>
         </div>
 
+        {{-- Banner Info Poin --}}
+        <div class="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-2xl p-5 mb-8">
+            <div class="flex items-start gap-4">
+                <div class="text-3xl shrink-0">🌟</div>
+                <div>
+                    <h3 class="font-bold text-amber-900 mb-2">Dapatkan Poin dengan Upload Dokumen!</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                        <div class="flex items-center gap-2 bg-white rounded-xl px-3 py-2 border border-amber-100">
+                            <span class="text-amber-500 text-lg">🪪</span>
+                            <div>
+                                <p class="font-bold text-slate-900">+50 Poin</p>
+                                <p class="text-xs text-slate-500">Upload dokumen pertama kali</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white rounded-xl px-3 py-2 border border-amber-100">
+                            <span class="text-amber-500 text-lg">🔄</span>
+                            <div>
+                                <p class="font-bold text-slate-900">+10 Poin</p>
+                                <p class="text-xs text-slate-500">Update KTP/SIM berikutnya</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white rounded-xl px-3 py-2 border border-amber-100">
+                            <span class="text-amber-500 text-lg">✅</span>
+                            <div>
+                                <p class="font-bold text-slate-900">+100 Poin</p>
+                                <p class="text-xs text-slate-500">Dokumen diverifikasi admin</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-amber-700 mt-3 font-medium">💡 Poin otomatis ditambahkan ke akun Anda setelah berhasil upload.</p>
+                </div>
+            </div>
+        </div>
+
         @if(session('success'))
             <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                 <p class="text-green-800 font-medium">{{ session('success') }}</p>

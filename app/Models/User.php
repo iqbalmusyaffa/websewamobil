@@ -30,6 +30,7 @@ class User extends Authenticatable implements FilamentUser
         'member_tier',
         'member_points',
         'member_valid_thru',
+        'wallet_balance',
     ];
 
     /**
@@ -53,12 +54,18 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'member_valid_thru' => 'date',
+            'wallet_balance' => 'float',
         ];
     }
 
     public function document()
     {
         return $this->hasOne(Document::class);
+    }
+
+    public function penalties()
+    {
+        return $this->hasMany(Penalty::class);
     }
 
     public function canAccessPanel(Panel $panel): bool
