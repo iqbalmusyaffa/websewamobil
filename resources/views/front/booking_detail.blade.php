@@ -469,25 +469,25 @@
                 <p class="text-xs sm:text-sm font-semibold text-slate-900 mb-3">Rincian Kebijakan Refund:</p>
                 <ul class="space-y-2 text-xs sm:text-sm text-slate-700">
                     <li class="flex items-start gap-2">
-                        <span class="text-green-600 font-bold">✓</span>
+                        <span class="text-green-600 font-bold shrink-0">✓</span>
                         <span><strong>&gt; 7 hari sebelum pickup:</strong> Refund <strong>100%</strong></span>
                     </li>
                     <li class="flex items-start gap-2">
-                        <span class="text-yellow-600 font-bold">~</span>
+                        <span class="text-yellow-600 font-bold shrink-0">~</span>
                         <span><strong>3-7 hari sebelum pickup:</strong> Refund <strong>50%</strong></span>
                     </li>
                     <li class="flex items-start gap-2">
-                        <span class="text-red-600 font-bold">✗</span>
+                        <span class="text-red-600 font-bold shrink-0">✗</span>
                         <span><strong>&lt; 3 hari sebelum pickup:</strong> Refund <strong>0%</strong> (tidak ada
                             refund)</span>
                     </li>
                     <li class="flex items-start gap-2 mt-3 pt-3 border-t border-slate-200">
-                        <span class="text-sky-600 font-bold">⭐</span>
+                        <span class="text-sky-600 font-bold shrink-0">⭐</span>
                         <span><strong>Exception (Alasan Rental):</strong> Refund <strong>100%</strong> (armada kurang,
                             sopir kurang, service jelek)</span>
                     </li>
                     <li class="flex items-start gap-2">
-                        <span class="text-purple-600 font-bold">⭐</span>
+                        <span class="text-purple-600 font-bold shrink-0">⭐</span>
                         <span><strong>Force Majeure:</strong> Refund <strong>100%</strong> (bencana alam, situasi
                             emergency)</span>
                     </li>

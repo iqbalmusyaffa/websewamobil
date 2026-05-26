@@ -5,7 +5,7 @@
             <div class="absolute -top-1/2 -right-1/4 w-full h-full bg-gradient-to-b from-sky-500/20 to-transparent rounded-full blur-3xl transform rotate-12"></div>
         </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <h1 class="text-4xl font-extrabold text-white sm:text-5xl tracking-tight mb-4">
+            <h1 class="text-3xl font-extrabold text-white sm:text-4xl md:text-5xl tracking-tight mb-4">
                 Syarat & Ketentuan
             </h1>
             <p class="text-lg text-slate-400 max-w-2xl mx-auto">
@@ -21,41 +21,45 @@
 
                 <!-- Sidebar Nav (Vertical Tabs) -->
                 <div class="w-full lg:w-1/4 shrink-0">
-                    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-3 sticky top-32">
-                        <nav class="space-y-1">
-                            <button @click="activeTab = 'umum'" :class="activeTab === 'umum' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="w-full flex items-center px-4 py-3 text-sm rounded-2xl transition-all duration-200 text-left">
+                    <div class="bg-white rounded-2xl lg:rounded-3xl shadow-sm border border-slate-200 p-2 lg:p-3 sticky top-24 lg:top-32 z-30">
+                        <style>
+                            .hide-scrollbar::-webkit-scrollbar { display: none; }
+                            .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+                        </style>
+                        <nav class="flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible gap-2 lg:gap-1 pb-1 lg:pb-0 snap-x hide-scrollbar">
+                            <button @click="activeTab = 'umum'" :class="activeTab === 'umum' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="whitespace-nowrap shrink-0 snap-start lg:w-full flex items-center px-4 py-2.5 lg:py-3 text-sm rounded-xl lg:rounded-2xl transition-all duration-200 text-left">
                                 <svg class="w-5 h-5 mr-3 shrink-0" :class="activeTab === 'umum' ? 'text-sky-500' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 1. Ketentuan Umum
                             </button>
-                            <button @click="activeTab = 'syarat'" :class="activeTab === 'syarat' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="w-full flex items-center px-4 py-3 text-sm rounded-2xl transition-all duration-200 text-left">
+                            <button @click="activeTab = 'syarat'" :class="activeTab === 'syarat' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="whitespace-nowrap shrink-0 snap-start lg:w-full flex items-center px-4 py-2.5 lg:py-3 text-sm rounded-xl lg:rounded-2xl transition-all duration-200 text-left">
                                 <svg class="w-5 h-5 mr-3 shrink-0" :class="activeTab === 'syarat' ? 'text-sky-500' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 2. Persyaratan Sewa
                             </button>
-                            <button @click="activeTab = 'bayar'" :class="activeTab === 'bayar' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="w-full flex items-center px-4 py-3 text-sm rounded-2xl transition-all duration-200 text-left">
+                            <button @click="activeTab = 'bayar'" :class="activeTab === 'bayar' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="whitespace-nowrap shrink-0 snap-start lg:w-full flex items-center px-4 py-2.5 lg:py-3 text-sm rounded-xl lg:rounded-2xl transition-all duration-200 text-left">
                                 <svg class="w-5 h-5 mr-3 shrink-0" :class="activeTab === 'bayar' ? 'text-sky-500' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
                                 3. Pembayaran
                             </button>
-                            <button @click="activeTab = 'denda'" :class="activeTab === 'denda' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="w-full flex items-center px-4 py-3 text-sm rounded-2xl transition-all duration-200 text-left">
+                            <button @click="activeTab = 'denda'" :class="activeTab === 'denda' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="whitespace-nowrap shrink-0 snap-start lg:w-full flex items-center px-4 py-2.5 lg:py-3 text-sm rounded-xl lg:rounded-2xl transition-all duration-200 text-left">
                                 <svg class="w-5 h-5 mr-3 shrink-0" :class="activeTab === 'denda' ? 'text-sky-500' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                                 4. Kewajiban & Denda
                             </button>
-                            <button @click="activeTab = 'asuransi'" :class="activeTab === 'asuransi' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="w-full flex items-center px-4 py-3 text-sm rounded-2xl transition-all duration-200 text-left">
+                            <button @click="activeTab = 'asuransi'" :class="activeTab === 'asuransi' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="whitespace-nowrap shrink-0 snap-start lg:w-full flex items-center px-4 py-2.5 lg:py-3 text-sm rounded-xl lg:rounded-2xl transition-all duration-200 text-left">
                                 <svg class="w-5 h-5 mr-3 shrink-0" :class="activeTab === 'asuransi' ? 'text-sky-500' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                                 5. Asuransi
                             </button>
-                            <button @click="activeTab = 'sopir'" :class="activeTab === 'sopir' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="w-full flex items-center px-4 py-3 text-sm rounded-2xl transition-all duration-200 text-left">
+                            <button @click="activeTab = 'sopir'" :class="activeTab === 'sopir' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="whitespace-nowrap shrink-0 snap-start lg:w-full flex items-center px-4 py-2.5 lg:py-3 text-sm rounded-xl lg:rounded-2xl transition-all duration-200 text-left">
                                 <svg class="w-5 h-5 mr-3 shrink-0" :class="activeTab === 'sopir' ? 'text-sky-500' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                                 6. Ketentuan Sopir
                             </button>
-                            <button @click="activeTab = 'darurat'" :class="activeTab === 'darurat' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="w-full flex items-center px-4 py-3 text-sm rounded-2xl transition-all duration-200 text-left">
+                            <button @click="activeTab = 'darurat'" :class="activeTab === 'darurat' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="whitespace-nowrap shrink-0 snap-start lg:w-full flex items-center px-4 py-2.5 lg:py-3 text-sm rounded-xl lg:rounded-2xl transition-all duration-200 text-left">
                                 <svg class="w-5 h-5 mr-3 shrink-0" :class="activeTab === 'darurat' ? 'text-sky-500' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                                 7. Larangan & Darurat
                             </button>
-                            <button @click="activeTab = 'ubah'" :class="activeTab === 'ubah' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="w-full flex items-center px-4 py-3 text-sm rounded-2xl transition-all duration-200 text-left">
+                            <button @click="activeTab = 'ubah'" :class="activeTab === 'ubah' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="whitespace-nowrap shrink-0 snap-start lg:w-full flex items-center px-4 py-2.5 lg:py-3 text-sm rounded-xl lg:rounded-2xl transition-all duration-200 text-left">
                                 <svg class="w-5 h-5 mr-3 shrink-0" :class="activeTab === 'ubah' ? 'text-sky-500' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 8. Proses & Refund
                             </button>
-                            <button @click="activeTab = 'perubahan'" :class="activeTab === 'perubahan' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="w-full flex items-center px-4 py-3 text-sm rounded-2xl transition-all duration-200 text-left">
+                            <button @click="activeTab = 'perubahan'" :class="activeTab === 'perubahan' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="whitespace-nowrap shrink-0 snap-start lg:w-full flex items-center px-4 py-2.5 lg:py-3 text-sm rounded-xl lg:rounded-2xl transition-all duration-200 text-left">
                                 <svg class="w-5 h-5 mr-3 shrink-0" :class="activeTab === 'perubahan' ? 'text-sky-500' : 'text-slate-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                                 9. Perubahan Aturan
                             </button>
@@ -64,8 +68,8 @@
                 </div>
 
                 <!-- Content Area -->
-                <div class="flex-1">
-                    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 md:p-12 min-h-[500px]">
+                <div class="flex-1 min-w-0">
+                    <div class="bg-white rounded-2xl lg:rounded-3xl shadow-sm border border-slate-200 p-5 sm:p-8 lg:p-12 min-h-[500px]">
 
                         <!-- 1. Ketentuan Umum -->
                         <div x-show="activeTab === 'umum'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" style="display: none;">
@@ -231,10 +235,10 @@
                                             <h4 class="text-lg font-bold text-emerald-900 mb-1">Penggunaan Kartu E-Toll Milik Penyewa</h4>
                                             <p class="text-emerald-800 leading-relaxed mb-3">Penyewa <strong>diizinkan membawa dan menggunakan kartu e-toll milik pribadi</strong> selama berkendara, baik pada paket sewa lepas kunci maupun dengan sopir. Ketentuan yang berlaku:</p>
                                             <ul class="space-y-1.5 text-emerald-800 text-sm">
-                                                <li class="flex items-start gap-2"><span class="text-emerald-600 font-bold mt-0.5">✓</span> Berlaku untuk paket <strong>Sewa Lepas Kunci</strong> — penyewa bebas menggunakan kartu e-toll pribadi saat mengemudi sendiri.</li>
-                                                <li class="flex items-start gap-2"><span class="text-emerald-600 font-bold mt-0.5">✓</span> Berlaku untuk paket <strong>Sewa dengan Sopir</strong> — penyewa dapat menyerahkan kartu e-toll pribadi kepada sopir untuk digunakan di gerbang tol.</li>
-                                                <li class="flex items-start gap-2"><span class="text-slate-500 font-bold mt-0.5">!</span> Seluruh <strong>biaya tol menjadi tanggung jawab penyewa</strong>, tidak termasuk dalam harga sewa.</li>
-                                                <li class="flex items-start gap-2"><span class="text-slate-500 font-bold mt-0.5">!</span> Pastikan saldo kartu e-toll mencukupi sebelum berangkat untuk menghindari antrean di gerbang tol.</li>
+                                                <li class="flex items-start gap-2"><span class="text-emerald-600 font-bold shrink-0 mt-0.5">✓</span> <span>Berlaku untuk paket <strong>Sewa Lepas Kunci</strong> — penyewa bebas menggunakan kartu e-toll pribadi saat mengemudi sendiri.</span></li>
+                                                <li class="flex items-start gap-2"><span class="text-emerald-600 font-bold shrink-0 mt-0.5">✓</span> <span>Berlaku untuk paket <strong>Sewa dengan Sopir</strong> — penyewa dapat menyerahkan kartu e-toll pribadi kepada sopir untuk digunakan di gerbang tol.</span></li>
+                                                <li class="flex items-start gap-2"><span class="text-slate-500 font-bold shrink-0 mt-0.5">!</span> <span>Seluruh <strong>biaya tol menjadi tanggung jawab penyewa</strong>, tidak termasuk dalam harga sewa.</span></li>
+                                                <li class="flex items-start gap-2"><span class="text-slate-500 font-bold shrink-0 mt-0.5">!</span> <span>Pastikan saldo kartu e-toll mencukupi sebelum berangkat untuk menghindari antrean di gerbang tol.</span></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -323,10 +327,10 @@
                                         <h4 class="text-lg font-bold text-amber-900 mb-2">Biaya Tidak Termasuk dalam Harga Sewa</h4>
                                         <p class="text-amber-800 leading-relaxed mb-3">Harga sewa dengan sopir <strong>belum termasuk</strong> biaya-biaya berikut yang menjadi tanggung jawab penyewa:</p>
                                         <ul class="space-y-1.5 text-amber-800">
-                                            <li class="flex items-start gap-2"><span class="font-bold">•</span> <strong>Uang makan sopir</strong> selama perjalanan</li>
-                                            <li class="flex items-start gap-2"><span class="font-bold">•</span> <strong>Biaya tol</strong> jika melewati jalan tol</li>
-                                            <li class="flex items-start gap-2"><span class="font-bold">•</span> <strong>Tiket parkir</strong> di seluruh lokasi tujuan</li>
-                                            <li class="flex items-start gap-2"><span class="font-bold">•</span> <strong>Tiket pelabuhan/penyeberangan</strong> jika perjalanan antar pulau (contoh: Jakarta — Bali)</li>
+                                            <li class="flex items-start gap-2"><span class="font-bold shrink-0">•</span> <span><strong>Uang makan sopir</strong> selama perjalanan</span></li>
+                                            <li class="flex items-start gap-2"><span class="font-bold shrink-0">•</span> <span><strong>Biaya tol</strong> jika melewati jalan tol</span></li>
+                                            <li class="flex items-start gap-2"><span class="font-bold shrink-0">•</span> <span><strong>Tiket parkir</strong> di seluruh lokasi tujuan</span></li>
+                                            <li class="flex items-start gap-2"><span class="font-bold shrink-0">•</span> <span><strong>Tiket pelabuhan/penyeberangan</strong> jika perjalanan antar pulau (contoh: Jakarta — Bali)</span></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -488,10 +492,10 @@
                                         <div>
                                             <h4 class="text-lg font-bold text-indigo-900 mb-2">⏱️ Timeline Refund</h4>
                                             <ul class="space-y-2 text-indigo-800 text-sm">
-                                                <li class="flex items-start gap-2"><span class="font-bold text-indigo-600 mt-0.5">1.</span> <strong>Pembatalan diterima</strong> — Status booking otomatis berubah menjadi "dibatalkan"</li>
-                                                <li class="flex items-start gap-2"><span class="font-bold text-indigo-600 mt-0.5">2.</span> <strong>Verifikasi Admin</strong> — Tim admin akan review pembatalan dalam <strong>1-2 jam</strong> kerja (jam kerja: Senin-Jumat 08:00-18:00 WIB)</li>
-                                                <li class="flex items-start gap-2"><span class="font-bold text-indigo-600 mt-0.5">3.</span> <strong>Refund Diproses</strong> — Setelah persetujuan, dana dikembalikan dalam <strong>5-7 hari kerja</strong></li>
-                                                <li class="flex items-start gap-2"><span class="font-bold text-indigo-600 mt-0.5">4.</span> <strong>Uang Masuk Rekening</strong> — Tergantung proses bank (biasanya sampai dalam 1-2 hari setelah bank memproses)</li>
+                                                <li class="flex items-start gap-2"><span class="font-bold text-indigo-600 shrink-0 mt-0.5">1.</span> <span><strong>Pembatalan diterima</strong> — Status booking otomatis berubah menjadi "dibatalkan"</span></li>
+                                                <li class="flex items-start gap-2"><span class="font-bold text-indigo-600 shrink-0 mt-0.5">2.</span> <span><strong>Verifikasi Admin</strong> — Tim admin akan review pembatalan dalam <strong>1-2 jam</strong> kerja (jam kerja: Senin-Jumat 08:00-18:00 WIB)</span></li>
+                                                <li class="flex items-start gap-2"><span class="font-bold text-indigo-600 shrink-0 mt-0.5">3.</span> <span><strong>Refund Diproses</strong> — Setelah persetujuan, dana dikembalikan dalam <strong>5-7 hari kerja</strong></span></li>
+                                                <li class="flex items-start gap-2"><span class="font-bold text-indigo-600 shrink-0 mt-0.5">4.</span> <span><strong>Uang Masuk Rekening</strong> — Tergantung proses bank (biasanya sampai dalam 1-2 hari setelah bank memproses)</span></li>
                                             </ul>
                                             <p class="text-indigo-700 mt-3 font-semibold italic">💡 Total estimasi: 6-9 hari kerja sejak pembatalan disetujui</p>
                                         </div>
@@ -507,10 +511,10 @@
                                         <div>
                                             <h4 class="text-lg font-bold text-slate-900 mb-2">Kondisi Khusus</h4>
                                             <ul class="space-y-2 text-slate-600 text-sm">
-                                                <li class="flex items-start gap-2"><span class="text-emerald-600 font-bold mt-0.5">✓</span> <strong>Pembatalan karena kesalahan penyewa</strong> (booking salah tanggal/mobil) — Refund sesuai kebijakan waktu (berlaku normal/3 hari rule)</li>
-                                                <li class="flex items-start gap-2"><span class="text-emerald-600 font-bold mt-0.5">✓</span> <strong>Pembatalan karena armada tidak siap</strong> — Refund 100% tanpa potongan (exception)</li>
-                                                <li class="flex items-start gap-2"><span class="text-emerald-600 font-bold mt-0.5">✓</span> <strong>Force Majeure</strong> (bencana alam, lockdown, emergency) — Refund 100% setelah approval admin</li>
-                                                <li class="flex items-start gap-2"><span class="text-rose-600 font-bold mt-0.5">✗</span> <strong>Pembatalan karena kerusakan kendaraan</strong> — Refund bergantung pada claim asuransi dan tanggung jawab</li>
+                                                <li class="flex items-start gap-2"><span class="text-emerald-600 font-bold shrink-0 mt-0.5">✓</span> <span><strong>Pembatalan karena kesalahan penyewa</strong> (booking salah tanggal/mobil) — Refund sesuai kebijakan waktu (berlaku normal/3 hari rule)</span></li>
+                                                <li class="flex items-start gap-2"><span class="text-emerald-600 font-bold shrink-0 mt-0.5">✓</span> <span><strong>Pembatalan karena armada tidak siap</strong> — Refund 100% tanpa potongan (exception)</span></li>
+                                                <li class="flex items-start gap-2"><span class="text-emerald-600 font-bold shrink-0 mt-0.5">✓</span> <span><strong>Force Majeure</strong> (bencana alam, lockdown, emergency) — Refund 100% setelah approval admin</span></li>
+                                                <li class="flex items-start gap-2"><span class="text-rose-600 font-bold shrink-0 mt-0.5">✗</span> <span><strong>Pembatalan karena kerusakan kendaraan</strong> — Refund bergantung pada claim asuransi dan tanggung jawab</span></li>
                                             </ul>
                                         </div>
                                     </div>

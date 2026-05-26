@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <h1 class="text-4xl font-extrabold text-white sm:text-5xl tracking-tight mb-4">
+            <h1 class="text-3xl font-extrabold text-white sm:text-4xl md:text-5xl tracking-tight mb-4">
                 Kebijakan Privasi
             </h1>
             <p class="text-lg text-slate-400 max-w-2xl mx-auto">
@@ -23,11 +23,15 @@
 
                 <!-- Sidebar Nav (Vertical Tabs) -->
                 <div class="w-full lg:w-1/4 shrink-0">
-                    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-3 sticky top-32">
-                        <nav class="space-y-1">
+                    <div class="bg-white rounded-2xl lg:rounded-3xl shadow-sm border border-slate-200 p-2 lg:p-3 sticky top-24 lg:top-32 z-30">
+                        <style>
+                            .hide-scrollbar::-webkit-scrollbar { display: none; }
+                            .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+                        </style>
+                        <nav class="flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible gap-2 lg:gap-1 pb-1 lg:pb-0 snap-x hide-scrollbar">
                             <button @click="activeTab = 'intro'"
                                 :class="activeTab === 'intro' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
-                                class="w-full flex items-center px-4 py-3 text-sm rounded-2xl transition-all duration-200 text-left">
+                                class="whitespace-nowrap shrink-0 snap-start lg:w-full flex items-center px-4 py-2.5 lg:py-3 text-sm rounded-xl lg:rounded-2xl transition-all duration-200 text-left">
                                 <svg class="w-5 h-5 mr-3 shrink-0"
                                     :class="activeTab === 'intro' ? 'text-sky-500' : 'text-slate-400'" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
@@ -38,7 +42,7 @@
                             </button>
                             <button @click="activeTab = 'kumpul'"
                                 :class="activeTab === 'kumpul' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
-                                class="w-full flex items-center px-4 py-3 text-sm rounded-2xl transition-all duration-200 text-left">
+                                class="whitespace-nowrap shrink-0 snap-start lg:w-full flex items-center px-4 py-2.5 lg:py-3 text-sm rounded-xl lg:rounded-2xl transition-all duration-200 text-left">
                                 <svg class="w-5 h-5 mr-3 shrink-0"
                                     :class="activeTab === 'kumpul' ? 'text-sky-500' : 'text-slate-400'" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
@@ -49,7 +53,7 @@
                             </button>
                             <button @click="activeTab = 'guna'"
                                 :class="activeTab === 'guna' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
-                                class="w-full flex items-center px-4 py-3 text-sm rounded-2xl transition-all duration-200 text-left">
+                                class="whitespace-nowrap shrink-0 snap-start lg:w-full flex items-center px-4 py-2.5 lg:py-3 text-sm rounded-xl lg:rounded-2xl transition-all duration-200 text-left">
                                 <svg class="w-5 h-5 mr-3 shrink-0"
                                     :class="activeTab === 'guna' ? 'text-sky-500' : 'text-slate-400'" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
@@ -63,7 +67,7 @@
                             </button>
                             <button @click="activeTab = 'aman'"
                                 :class="activeTab === 'aman' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
-                                class="w-full flex items-center px-4 py-3 text-sm rounded-2xl transition-all duration-200 text-left">
+                                class="whitespace-nowrap shrink-0 snap-start lg:w-full flex items-center px-4 py-2.5 lg:py-3 text-sm rounded-xl lg:rounded-2xl transition-all duration-200 text-left">
                                 <svg class="w-5 h-5 mr-3 shrink-0"
                                     :class="activeTab === 'aman' ? 'text-sky-500' : 'text-slate-400'" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
@@ -75,7 +79,7 @@
                             </button>
                             <button @click="activeTab = 'berbagi'"
                                 :class="activeTab === 'berbagi' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
-                                class="w-full flex items-center px-4 py-3 text-sm rounded-2xl transition-all duration-200 text-left">
+                                class="whitespace-nowrap shrink-0 snap-start lg:w-full flex items-center px-4 py-2.5 lg:py-3 text-sm rounded-xl lg:rounded-2xl transition-all duration-200 text-left">
                                 <svg class="w-5 h-5 mr-3 shrink-0"
                                     :class="activeTab === 'berbagi' ? 'text-sky-500' : 'text-slate-400'" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
@@ -86,7 +90,7 @@
                             </button>
                             <button @click="activeTab = 'kontak'"
                                 :class="activeTab === 'kontak' ? 'bg-sky-50 text-sky-600 font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
-                                class="w-full flex items-center px-4 py-3 text-sm rounded-2xl transition-all duration-200 text-left">
+                                class="whitespace-nowrap shrink-0 snap-start lg:w-full flex items-center px-4 py-2.5 lg:py-3 text-sm rounded-xl lg:rounded-2xl transition-all duration-200 text-left">
                                 <svg class="w-5 h-5 mr-3 shrink-0"
                                     :class="activeTab === 'kontak' ? 'text-sky-500' : 'text-slate-400'" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
@@ -101,8 +105,8 @@
                 </div>
 
                 <!-- Content Area -->
-                <div class="flex-1">
-                    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 md:p-12 min-h-[500px]">
+                <div class="flex-1 min-w-0">
+                    <div class="bg-white rounded-2xl lg:rounded-3xl shadow-sm border border-slate-200 p-5 sm:p-8 lg:p-12 min-h-[500px]">
 
                         <!-- 1. Pendahuluan -->
                         <div x-show="activeTab === 'intro'" x-transition:enter="transition ease-out duration-300"
@@ -390,19 +394,9 @@
                                                 membagikan data spesifik hanya kepada pihak berwenang berikut untuk
                                                 kelancaran layanan:</p>
                                             <ul class="space-y-1.5 text-amber-800 text-sm">
-                                                <li class="flex items-start gap-2"><span
-                                                        class="font-bold mt-0.5">•</span> <strong>Gateway Pembayaran
-                                                        (Midtrans):</strong> Memproses transaksi keuangan secara aman
-                                                    dan terenkripsi.</li>
-                                                <li class="flex items-start gap-2"><span
-                                                        class="font-bold mt-0.5">•</span> <strong>Pihak
-                                                        Asuransi:</strong> Membantu proses investigasi jika terjadi
-                                                    klaim kerusakan/kecelakaan.</li>
-                                                <li class="flex items-start gap-2"><span
-                                                        class="font-bold mt-0.5">•</span> <strong>Kepolisian / Aparat
-                                                        Hukum:</strong> Jika terdapat laporan tilang (E-TLE), indikasi
-                                                    pencurian, atau tindak pidana lainnya yang melibatkan kendaraan
-                                                    sewa.</li>
+                                                <li class="flex items-start gap-2"><span class="font-bold shrink-0 mt-0.5">•</span> <span><strong>Gateway Pembayaran (Midtrans):</strong> Memproses transaksi keuangan secara aman dan terenkripsi.</span></li>
+                                                <li class="flex items-start gap-2"><span class="font-bold shrink-0 mt-0.5">•</span> <span><strong>Pihak Asuransi:</strong> Membantu proses investigasi jika terjadi klaim kerusakan/kecelakaan.</span></li>
+                                                <li class="flex items-start gap-2"><span class="font-bold shrink-0 mt-0.5">•</span> <span><strong>Kepolisian / Aparat Hukum:</strong> Jika terdapat laporan tilang (E-TLE), indikasi pencurian, atau tindak pidana lainnya yang melibatkan kendaraan sewa.</span></li>
                                             </ul>
                                         </div>
                                     </div>

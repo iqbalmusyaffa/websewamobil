@@ -4,6 +4,14 @@
     <meta property="og:title" content="{{ $car->brand }} {{ $car->name }} | AutoRent">
     <meta property="og:description" content="Sewa {{ $car->name }} mulai Rp {{ number_format($car->can_lepas_kunci ? $car->price_without_driver : $car->price_with_driver, 0, ',', '.') }}/hari. Armada terawat, harga transparan.">
     <meta property="og:image" content="{{ $car->image_url ?? 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800' }}">
+    <style>
+        @media (max-width: 1024px) {
+            /* Angkat tombol WA sedikit ke atas agar tidak tertutup sticky bar */
+            a[href*="wa.me"] {
+                bottom: 5.5rem !important;
+            }
+        }
+    </style>
     @endpush
 
     <div class="bg-slate-50 py-12">
@@ -277,7 +285,7 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="translate-y-0 opacity-100"
          x-transition:leave-end="translate-y-full opacity-0">
-        <div class="bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-2xl shadow-slate-900/20 px-4 py-3 safe-area-inset-bottom pr-20">
+        <div class="bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-2xl shadow-slate-900/20 px-4 py-3 safe-area-inset-bottom">
             <div class="flex items-center justify-between gap-4">
                 {{-- Info Harga --}}
                 <div class="flex-1 min-w-0">
@@ -291,20 +299,20 @@
                         @endif
                     </div>
                     <div class="flex items-baseline gap-1 flex-wrap">
-                        <span class="text-2xl font-black text-slate-900 leading-none">Rp {{ number_format($bestPrice, 0, ',', '.') }}</span>
-                        <span class="text-xs font-semibold text-slate-500">/ {{ $car->can_lepas_kunci ? 'hari' : '12 jam' }}</span>
+                        <span class="text-xl font-black text-slate-900 leading-none">Rp {{ number_format($bestPrice, 0, ',', '.') }}</span>
+                        <span class="text-[11px] font-semibold text-slate-500">/ {{ $car->can_lepas_kunci ? 'hari' : '12 jam' }}</span>
                     </div>
-                    <p class="text-[10px] text-slate-400 mt-0.5">{{ $bestLabel }}</p>
+                    <p class="text-[10px] text-slate-400 mt-0.5 truncate">{{ $bestLabel }}</p>
                 </div>
 
                 {{-- Tombol CTA --}}
                 <div class="flex flex-col gap-2 shrink-0">
                     <a href="{{ route('checkout', $car) }}"
-                       class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-sky-600/30 transition-all active:scale-95">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-sky-600/30 transition-all active:scale-95">
+                        <svg class="w-4 h-4 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
-                        Pesan Sekarang
+                        Pesan
                     </a>
                 </div>
             </div>
