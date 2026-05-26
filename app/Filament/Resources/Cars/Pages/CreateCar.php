@@ -11,6 +11,10 @@ class CreateCar extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
+        if (empty($data['can_lepas_kunci'])) {
+            $data['price_without_driver'] = 0;
+        }
+
         if (!empty($data['image_url'])) {
             $data['image'] = $data['image_url'];
         }
