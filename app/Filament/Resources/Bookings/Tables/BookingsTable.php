@@ -102,7 +102,8 @@ class BookingsTable
                     ->color('success')
                     ->url(fn (\App\Models\Booking $record) => route('admin.invoice.download', $record))
                     ->openUrlInNewTab(),
-                \Filament\Tables\Actions\Action::make('kembalikan_deposit')
+                // \Filament\Tables\Actions\Action::make('kembalikan_deposit')
+                \Filament\Actions\Action::make('kembalikan_deposit')
                     ->label('Kembalikan Deposit')
                     ->icon('heroicon-o-wallet')
                     ->color('warning')
@@ -124,17 +125,17 @@ class BookingsTable
                     ->action(function (\App\Models\Booking $record, array $data) {
                         $amount = (float) $data['refund_amount'];
                         $user = $record->user;
-                        
+
                         if ($amount > 0 && $user) {
                             $user->wallet_balance += $amount;
                             $user->save();
                         }
-                        
+
                         $record->update([
                             'deposit_status' => 'refunded',
                             'deposit_refund_date' => now(),
                         ]);
-                        
+
                         \Filament\Notifications\Notification::make()
                             ->title('Deposit Berhasil Dikembalikan')
                             ->body("Nominal Rp " . number_format($amount, 0, ',', '.') . " telah ditambahkan ke Wallet pengguna.")

@@ -59,11 +59,11 @@
             </div>
 
             <!-- Right Side: Form -->
-            <div class="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-24 bg-slate-950 relative overflow-hidden">
+            <div class="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 lg:p-16 xl:p-24 bg-slate-950 relative overflow-hidden min-h-screen">
                 <!-- Decorative blobs -->
-                <div class="absolute top-0 -left-4 w-72 h-72 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-                <div class="absolute top-0 -right-4 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-                <div class="absolute -bottom-8 left-20 w-72 h-72 bg-cyan-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+                <div class="absolute top-0 -left-4 w-72 h-72 bg-indigo-600 rounded-full filter blur-3xl opacity-20 animate-blob"></div>
+                <div class="absolute top-0 -right-4 w-72 h-72 bg-purple-600 rounded-full filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+                <div class="absolute -bottom-8 left-20 w-72 h-72 bg-cyan-600 rounded-full filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
 
                 <div class="w-full max-w-md relative z-10">
                     <!-- Mobile Logo -->
@@ -76,7 +76,7 @@
                         </a>
                     </div>
 
-                    <div class="bg-slate-900/60 backdrop-blur-2xl p-8 sm:p-10 rounded-3xl shadow-2xl border border-slate-700/50">
+                    <div class="bg-slate-900/60 backdrop-blur-2xl p-6 sm:p-10 rounded-3xl shadow-2xl border border-slate-700/50">
                         {{ $slot }}
                     </div>
                 </div>

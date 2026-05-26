@@ -95,7 +95,6 @@ class CarForm
                                 TextInput::make('image_url')
                                     ->label('URL Gambar')
                                     ->url()
-                                    ->dehydrated(false)
                                     ->hint('Atau paste link gambar dari Google. (Prioritas lebih tinggi dari upload file)'),
                             ]),
                     ])

@@ -79,7 +79,6 @@ class BranchResource extends Resource
                             Forms\Components\TextInput::make('cover_image_url')
                                 ->label('URL Gambar')
                                 ->url()
-                                ->dehydrated(false)
                                 ->helperText('Atau paste link gambar dari Google Photos, Unsplash, atau sumber lain'),
                         ]),
                 ]),
@@ -115,7 +114,6 @@ class BranchResource extends Resource
                         ->schema([
                             Forms\Components\Textarea::make('gallery_urls')
                                 ->label('URL Foto Galeri')
-                                ->dehydrated(false)
                                 ->helperText('Paste link foto, satu per baris. Contoh:' . "\n" . 'https://images.unsplash.com/photo-1...' . "\n" . 'https://images.unsplash.com/photo-2...'),
                         ]),
                 ]),
