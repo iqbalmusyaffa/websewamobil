@@ -69,6 +69,7 @@ Route::middleware(['auth'])->group(function () {
     // Documents
     Route::get('/documents', [FrontController::class, 'documents'])->name('documents.index');
     Route::post('/documents', [FrontController::class, 'storeDocuments'])->name('documents.store');
+    Route::get('/document/secure/{document}/{type}', [\App\Http\Controllers\SecureDocumentController::class, 'show'])->name('document.secure');
 
     // Invoice
     Route::get('/bookings/{booking}/invoice', [FrontController::class, 'invoicePrint'])->name('bookings.invoice');

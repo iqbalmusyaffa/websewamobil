@@ -24,7 +24,7 @@ class DocumentForm
                                 FileUpload::make('ktp_path')
                                     ->label('Upload KTP')
                                     ->image()
-                                    ->disk('public')
+                                    ->disk('local')
                                     ->directory('documents/ktp')
                                     ->helperText('Upload foto/scan KTP (JPG, PNG, PDF)'),
                             ]),
@@ -44,7 +44,7 @@ class DocumentForm
                                 FileUpload::make('sim_path')
                                     ->label('Upload SIM')
                                     ->image()
-                                    ->disk('public')
+                                    ->disk('local')
                                     ->directory('documents/sim')
                                     ->helperText('Upload foto/scan SIM (JPG, PNG, PDF)'),
                             ]),

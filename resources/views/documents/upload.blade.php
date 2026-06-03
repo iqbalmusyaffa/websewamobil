@@ -107,7 +107,12 @@
                         </div>
                         <div>
                             <p class="text-sm text-slate-600">KTP</p>
-                            <p class="text-sm font-medium text-slate-900">{{ $document->ktp_path ? '✓ Terupload' : '✗ Belum upload' }}</p>
+                            <p class="text-sm font-medium text-slate-900 mb-1">{{ $document->ktp_path ? '✓ Terupload' : '✗ Belum upload' }}</p>
+                            @if($document->ktp_path)
+                                <a href="{{ route('document.secure', ['document' => $document->id, 'type' => 'ktp']) }}" target="_blank" class="text-xs text-sky-600 hover:text-sky-700 font-medium underline">
+                                    Lihat / Download KTP
+                                </a>
+                            @endif
                         </div>
                     </div>
 
@@ -126,7 +131,12 @@
                         </div>
                         <div>
                             <p class="text-sm text-slate-600">SIM</p>
-                            <p class="text-sm font-medium text-slate-900">{{ $document->sim_path ? '✓ Terupload' : '✗ Belum upload' }}</p>
+                            <p class="text-sm font-medium text-slate-900 mb-1">{{ $document->sim_path ? '✓ Terupload' : '✗ Belum upload' }}</p>
+                            @if($document->sim_path)
+                                <a href="{{ route('document.secure', ['document' => $document->id, 'type' => 'sim']) }}" target="_blank" class="text-xs text-sky-600 hover:text-sky-700 font-medium underline">
+                                    Lihat / Download SIM
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>

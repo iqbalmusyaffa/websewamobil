@@ -14,12 +14,23 @@ class DocumentsTable
     {
         return $table
             ->columns([
-                TextColumn::make('user_id')
-                    ->numeric()
+                TextColumn::make('user.name')
+                    ->label('Nama Pengguna')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('ktp_path')
+                    ->label('KTP')
+                    ->formatStateUsing(fn ($state) => $state ? 'Lihat KTP' : '-')
+                    ->url(fn ($record) => $record->ktp_path ? route('document.secure', ['document' => $record->id, 'type' => 'ktp']) : null)
+                    ->openUrlInNewTab()
+                    ->color('primary')
                     ->searchable(),
                 TextColumn::make('sim_path')
+                    ->label('SIM')
+                    ->formatStateUsing(fn ($state) => $state ? 'Lihat SIM' : '-')
+                    ->url(fn ($record) => $record->sim_path ? route('document.secure', ['document' => $record->id, 'type' => 'sim']) : null)
+                    ->openUrlInNewTab()
+                    ->color('primary')
                     ->searchable(),
                 TextColumn::make('status')
                     ->badge(),
@@ -36,6 +47,11 @@ class DocumentsTable
                 //
             ])
             ->recordActions([
+                \Filament\Tables\Actions\Action::make('lihat_pemesanan')
+                    ->label('Lihat Pemesanan')
+                    ->icon('heroicon-o-shopping-bag')
+                    ->color('info')
+                    ->url(fn ($record) => route('filament.admin.resources.bookings.index', ['tableFilters[user_id][value]' => $record->user_id])),
                 EditAction::make(),
             ])
             ->toolbarActions([

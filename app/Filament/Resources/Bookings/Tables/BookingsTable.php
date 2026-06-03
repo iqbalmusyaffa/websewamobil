@@ -93,7 +93,10 @@ class BookingsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                \Filament\Tables\Filters\SelectFilter::make('user_id')
+                    ->label('Pelanggan')
+                    ->relationship('user', 'name')
+                    ->searchable(),
             ])
             ->recordActions([
                 \Filament\Actions\Action::make('cetak_kwitansi')

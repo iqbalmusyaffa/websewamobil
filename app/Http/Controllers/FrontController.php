@@ -751,8 +751,8 @@ class FrontController extends Controller
         // Handle KTP - file upload
         if ($request->hasFile('ktp_file')) {
             $file = $request->file('ktp_file');
-            $path = $file->store('documents/ktp', 'public');
-            $data['ktp_path'] = 'storage/' . $path;
+            $path = $file->store('documents/ktp', 'local');
+            $data['ktp_path'] = $path;
         }
         // Handle KTP - URL link
         elseif ($request->filled('ktp_url')) {
@@ -762,8 +762,8 @@ class FrontController extends Controller
         // Handle SIM - file upload
         if ($request->hasFile('sim_file')) {
             $file = $request->file('sim_file');
-            $path = $file->store('documents/sim', 'public');
-            $data['sim_path'] = 'storage/' . $path;
+            $path = $file->store('documents/sim', 'local');
+            $data['sim_path'] = $path;
         }
         // Handle SIM - URL link
         elseif ($request->filled('sim_url')) {
