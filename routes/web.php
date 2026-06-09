@@ -11,6 +11,9 @@ Route::get('/cars/{car}', [FrontController::class, 'show'])->name('cars.show');
 Route::get('/about', [FrontController::class, 'about'])->name('about');
 Route::get('/faq', [FrontController::class, 'faq'])->name('faq');
 Route::get('/contact', [FrontController::class, 'contact'])->name('contact');
+Route::post('/contact', [FrontController::class, 'submitContact'])->name('contact.submit');
+Route::get('/bug-report', [FrontController::class, 'bugReport'])->name('bug-report');
+Route::post('/bug-report', [FrontController::class, 'submitBugReport'])->name('bug-report.submit');
 Route::get('/career', [FrontController::class, 'career'])->name('career');
 Route::get('/career/{job}', [FrontController::class, 'careerShow'])->name('career.show');
 Route::get('/blog', [FrontController::class, 'blog'])->name('blog');
@@ -22,6 +25,15 @@ Route::get('/cabang', [FrontController::class, 'cabangIndex'])->name('cabang.ind
 Route::get('/cabang/{slug}', [FrontController::class, 'cabang'])->name('cabang.show');
 Route::get('/sitemap', [FrontController::class, 'sitemap'])->name('sitemap');
 
+// Airport Transfer
+Route::get('/airport-transfer', [FrontController::class, 'airportTransfer'])->name('airport-transfer');
+Route::get('/airport-transfer/search', [FrontController::class, 'airportTransferSearch'])->name('airport-transfer.search');
+Route::get('/airport-transfer/checkout/{price_id}', [FrontController::class, 'airportTransferCheckout'])->name('airport-transfer.checkout');
+Route::post('/airport-transfer/checkout/{price_id}', [FrontController::class, 'airportTransferStore'])->name('airport-transfer.store');
+Route::get('/airport-transfer/payment/{booking_code}', [FrontController::class, 'airportTransferPayment'])->name('airport-transfer.payment');
+Route::post('/airport-transfer/payment/{booking_code}/manual', [FrontController::class, 'airportTransferManualPayment'])->name('airport-transfer.manual');
+Route::get('/airport-transfer/booking/{booking_code}', [FrontController::class, 'airportTransferShow'])->name('airport-transfer.show');
+
 // AJAX: promo code check (allow both guest and auth)
 Route::post('/promo/check', [FrontController::class, 'checkPromo'])->name('promo.check');
 
@@ -29,9 +41,14 @@ Route::post('/promo/check', [FrontController::class, 'checkPromo'])->name('promo
 Route::post('/api/check-availability', [FrontController::class, 'checkAvailability'])->name('api.check-availability');
 Route::get('/invoice/{booking}/validate', [FrontController::class, 'validateInvoice'])->name('invoice.validate');
 
+// Travel Shuttle
+Route::get('/shuttle', [App\Http\Controllers\ShuttleController::class, 'index'])->name('shuttle.index');
+
 // Validasi Dokumen Umum
 Route::get('/validasi-dokumen', [FrontController::class, 'validationForm'])->name('validation.form');
 Route::post('/validasi-dokumen', [FrontController::class, 'processValidation'])->name('validation.process');
+Route::get('/shuttle/validate/{booking_code}', [FrontController::class, 'validateShuttle'])->name('shuttle.validate');
+Route::get('/airport-transfer/validate/{booking_code}', [FrontController::class, 'validateAirport'])->name('airport.validate');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [FrontController::class, 'dashboard'])->name('dashboard');
@@ -49,6 +66,21 @@ Route::middleware(['auth'])->group(function () {
     // Payment
     Route::get('/payment/{booking}', [\App\Http\Controllers\PaymentController::class, 'show'])->name('payment.show');
     Route::post('/payment/{booking}/manual', [\App\Http\Controllers\PaymentController::class, 'manual'])->name('payment.manual');
+
+    // Shuttle Booking
+    Route::get('/shuttle/checkout/{route}', [\App\Http\Controllers\ShuttleController::class, 'checkout'])->name('shuttle.checkout');
+    Route::post('/shuttle/checkout/{route}', [\App\Http\Controllers\ShuttleController::class, 'store'])->name('shuttle.store');
+    
+    // Shuttle routes
+    Route::get('/shuttle/payment/{booking_code}', [\App\Http\Controllers\ShuttleController::class, 'payment'])->name('shuttle.payment');
+    Route::post('/shuttle/payment/{booking_code}/manual', [\App\Http\Controllers\ShuttleController::class, 'manualPayment'])->name('shuttle.manual');
+    Route::get('/shuttle', [\App\Http\Controllers\ShuttleController::class, 'index'])->name('shuttle.index');
+    
+    // API endpoint for booked seats
+    Route::get('/shuttle/api/booked-seats', [\App\Http\Controllers\ShuttleController::class, 'getBookedSeats'])->name('shuttle.api.booked-seats');
+    Route::get('/shuttle/booking/{booking_code}', [\App\Http\Controllers\ShuttleController::class, 'show'])->name('shuttle.show');
+    Route::get('/shuttle/booking/{booking_code}/print', [\App\Http\Controllers\ShuttleController::class, 'printThermal'])->name('shuttle.print');
+    Route::get('/shuttle/booking/{booking_code}/pdf', [\App\Http\Controllers\ShuttleController::class, 'downloadPdf'])->name('shuttle.pdf');
 
     // Wishlist
     Route::get('/wishlist', [FrontController::class, 'wishlist'])->name('wishlist');

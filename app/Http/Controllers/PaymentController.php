@@ -63,24 +63,48 @@ class PaymentController extends Controller
         if ($hashed == $request->signature_key) {
             // Validate order id prefix
             $orderParts = explode('-', $request->order_id);
-            if (count($orderParts) >= 2 && $orderParts[0] === 'TRX') {
+            if (count($orderParts) >= 2) {
+                $prefix = $orderParts[0];
                 $bookingId = $orderParts[1];
-                $booking = Booking::find($bookingId);
 
-                if ($booking) {
-                    if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
-                        // Only award points if it was previously not paid
-                        if ($booking->payment_status !== 'paid') {
-                            $booking->update(['status' => 'disetujui', 'payment_method' => $request->payment_type, 'payment_status' => 'paid']);
-                            
-                            // Award points (1 point per Rp 10.000)
-                            $pointsEarned = floor($booking->total_price / 10000);
-                            if ($pointsEarned > 0) {
-                                $booking->user->addPoints($pointsEarned, 'Mendapatkan poin dari Booking #' . $booking->id, $booking->id);
+                if ($prefix === 'TRX') {
+                    $booking = Booking::find($bookingId);
+                    if ($booking) {
+                        if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
+                            if ($booking->payment_status !== 'paid') {
+                                $booking->update(['status' => 'disetujui', 'payment_method' => $request->payment_type, 'payment_status' => 'paid']);
+                                
+                                // Award points
+                                $pointsEarned = floor($booking->total_price / 10000);
+                                if ($pointsEarned > 0) {
+                                    $booking->user->addPoints($pointsEarned, 'Mendapatkan poin dari Booking #' . $booking->id, $booking->id);
+                                }
                             }
+                        } elseif ($request->transaction_status == 'cancel' || $request->transaction_status == 'deny' || $request->transaction_status == 'expire') {
+                            $booking->update(['status' => 'dibatalkan']);
                         }
-                    } elseif ($request->transaction_status == 'cancel' || $request->transaction_status == 'deny' || $request->transaction_status == 'expire') {
-                        $booking->update(['status' => 'dibatalkan']);
+                    }
+                } elseif ($prefix === 'APT') { // Airport Transfer Booking
+                    $airportBooking = \App\Models\AirportBooking::find($bookingId);
+                    if ($airportBooking) {
+                        if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
+                            if ($airportBooking->payment_status !== 'paid') {
+                                $airportBooking->update(['payment_status' => 'paid', 'booking_status' => 'accepted']);
+                            }
+                        } elseif ($request->transaction_status == 'cancel' || $request->transaction_status == 'deny' || $request->transaction_status == 'expire') {
+                            $airportBooking->update(['payment_status' => 'failed']);
+                        }
+                    }
+                } elseif ($prefix === 'SHT') { // Shuttle Booking
+                    $shuttleBooking = \App\Models\ShuttleBooking::find($bookingId);
+                    if ($shuttleBooking) {
+                        if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
+                            if ($shuttleBooking->payment_status !== 'paid') {
+                                $shuttleBooking->update(['payment_status' => 'paid', 'status' => 'tiket diterima']);
+                            }
+                        } elseif ($request->transaction_status == 'cancel' || $request->transaction_status == 'deny' || $request->transaction_status == 'expire') {
+                            $shuttleBooking->update(['payment_status' => 'unpaid', 'status' => 'cancelled']);
+                        }
                     }
                 }
             }

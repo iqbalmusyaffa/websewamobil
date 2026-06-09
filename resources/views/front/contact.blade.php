@@ -15,12 +15,12 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
                 <div class="grid grid-cols-1 md:grid-cols-2">
-                    
+
                     <!-- Contact Info -->
                     <div class="bg-slate-50 p-10 lg:p-16">
                         <h3 class="text-2xl font-extrabold text-slate-900 mb-6">Informasi Kontak</h3>
                         <p class="text-slate-600 mb-10">Punya pertanyaan seputar sewa, kemitraan, atau ingin memberikan masukan? Jangan ragu untuk menghubungi kami melalui kanal di bawah ini.</p>
-                        
+
                         <div class="space-y-8">
                             <div class="flex items-start">
                                 <div class="flex-shrink-0">
@@ -63,29 +63,45 @@
                     <!-- Contact Form -->
                     <div class="p-10 lg:p-16">
                         <h3 class="text-2xl font-extrabold text-slate-900 mb-6">Kirim Pesan</h3>
-                        <form action="#" method="POST" class="space-y-6">
+
+                        @if(session('success'))
+                            <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 font-medium">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        <form action="{{ route('contact.submit') }}" method="POST" class="space-y-6">
                             @csrf
                             <div>
                                 <label for="name" class="block text-sm font-semibold text-slate-700">Nama Lengkap</label>
-                                <input type="text" name="name" id="name" class="mt-2 block w-full px-4 py-3 rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors text-sm" placeholder="Budi Santoso">
+                                <input type="text" name="name" id="name" value="{{ old('name') }}" required class="mt-2 block w-full px-4 py-3 rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors text-sm" placeholder="Budi Santoso">
+                                @error('name')
+                                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </div>
-                            
+
                             <div>
                                 <label for="email" class="block text-sm font-semibold text-slate-700">Alamat Email</label>
-                                <input type="email" name="email" id="email" class="mt-2 block w-full px-4 py-3 rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors text-sm" placeholder="budi@example.com">
+                                <input type="email" name="email" id="email" value="{{ old('email') }}" required class="mt-2 block w-full px-4 py-3 rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors text-sm" placeholder="budi@example.com">
+                                @error('email')
+                                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div>
                                 <label for="message" class="block text-sm font-semibold text-slate-700">Pesan Anda</label>
-                                <textarea id="message" name="message" rows="4" class="mt-2 block w-full px-4 py-3 rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors text-sm" placeholder="Tulis pesan Anda di sini..."></textarea>
+                                <textarea id="message" name="message" rows="4" required class="mt-2 block w-full px-4 py-3 rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors text-sm" placeholder="Tulis pesan Anda di sini...">{{ old('message') }}</textarea>
+                                @error('message')
+                                    <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </div>
 
-                            <button type="button" onclick="alert('Ini adalah contoh form. Fitur pengiriman pesan akan diintegrasikan dengan sistem email backend.')" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-md text-sm font-bold text-white bg-slate-900 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors">
+                            <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-md text-sm font-bold text-white bg-slate-900 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors">
                                 Kirim Pesan
                             </button>
                         </form>
                     </div>
-                    
+
                 </div>
             </div>
         </div>

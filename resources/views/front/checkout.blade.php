@@ -305,6 +305,7 @@
                                                 :class="selectedBranchId == '{{ $branch->id }}' ? 'border-sky-500 bg-sky-50' : 'border-slate-200 hover:border-slate-300'">
                                                 <input type="radio" name="branch_id" value="{{ $branch->id }}"
                                                     x-model="selectedBranchId"
+                                                    :required="pickupMode === 'pickup_branch'"
                                                     class="w-4 h-4 text-sky-600 border-slate-300 focus:ring-sky-500">
                                                 <div class="flex-1 min-w-0">
                                                     <p class="font-bold text-slate-900 text-sm">{{ $branch->name }}</p>
@@ -333,7 +334,7 @@
                                         {{-- Dropdown Wilayah --}}
                                         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
                                             <div>
-                                                <select x-model="selectedProvinceId" @change="fetchRegencies" required class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition text-sm py-2.5 px-3">
+                                                <select x-model="selectedProvinceId" @change="fetchRegencies" :required="pickupMode === 'home_delivery'" class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition text-sm py-2.5 px-3">
                                                     <option value="" disabled>Pilih Provinsi</option>
                                                     <template x-for="prov in provinces" :key="prov.id">
                                                         <option :value="prov.id" x-text="prov.name"></option>
@@ -341,7 +342,7 @@
                                                 </select>
                                             </div>
                                             <div>
-                                                <select x-model="selectedRegencyId" @change="fetchDistricts" :disabled="regencies.length === 0" required class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition text-sm py-2.5 px-3 disabled:opacity-50">
+                                                <select x-model="selectedRegencyId" @change="fetchDistricts" :disabled="regencies.length === 0" :required="pickupMode === 'home_delivery'" class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition text-sm py-2.5 px-3 disabled:opacity-50">
                                                     <option value="" disabled>Pilih Kabupaten/Kota</option>
                                                     <template x-for="reg in regencies" :key="reg.id">
                                                         <option :value="reg.id" x-text="reg.name"></option>
@@ -349,7 +350,7 @@
                                                 </select>
                                             </div>
                                             <div>
-                                                <select x-model="selectedDistrictId" @change="updateDistrictName" :disabled="districts.length === 0" required class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition text-sm py-2.5 px-3 disabled:opacity-50">
+                                                <select x-model="selectedDistrictId" @change="updateDistrictName" :disabled="districts.length === 0" :required="pickupMode === 'home_delivery'" class="w-full rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition text-sm py-2.5 px-3 disabled:opacity-50">
                                                     <option value="" disabled>Pilih Kecamatan</option>
                                                     <template x-for="dist in districts" :key="dist.id">
                                                         <option :value="dist.id" x-text="dist.name"></option>

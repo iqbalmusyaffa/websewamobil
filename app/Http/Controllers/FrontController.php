@@ -13,6 +13,13 @@ use App\Models\Review;
 use App\Models\Wishlist;
 use App\Models\Job;
 use App\Models\BlogPost;
+use App\Models\ContactMessage;
+use App\Models\BugReport;
+use App\Models\BugBountyProgram;
+use App\Models\Airport;
+use App\Models\AirportZone;
+use App\Models\AirportTransferPrice;
+use App\Models\AirportBooking;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +31,9 @@ class FrontController extends Controller
     public function index()
     {
         $cars = Car::take(6)->get();
+        $airportTransfers = \App\Models\AirportTransferPrice::with(['airport', 'airportZone', 'car'])->take(3)->get();
+        $shuttles = \App\Models\ShuttleRoute::take(3)->get();
+        
         $promos = PromoCode::where('is_active', true)
             ->where(function ($q) {
                 $q->whereNull('valid_from')->orWhere('valid_from', '<=', now());
@@ -34,7 +44,7 @@ class FrontController extends Controller
             ->latest()
             ->take(2)
             ->get();
-        return view('front.index', compact('cars', 'promos'));
+        return view('front.index', compact('cars', 'airportTransfers', 'shuttles', 'promos'));
     }
 
     public function dashboard()
@@ -45,16 +55,40 @@ class FrontController extends Controller
         $activeBookingsCount = Booking::where('user_id', $user->id)
             ->whereIn('status', ['disetujui', 'berjalan'])
             ->count();
+        $activeBookingsCount += \App\Models\ShuttleBooking::where('user_id', $user->id)
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->count();
+        $activeBookingsCount += \App\Models\AirportBooking::where('user_id', $user->id)
+            ->whereIn('booking_status', ['pending', 'confirmed'])
+            ->count();
 
         // Total completed bookings
         $completedBookingsCount = Booking::where('user_id', $user->id)
             ->where('status', 'selesai')
+            ->count();
+        $completedBookingsCount += \App\Models\ShuttleBooking::where('user_id', $user->id)
+            ->where('status', 'completed')
+            ->count();
+        $completedBookingsCount += \App\Models\AirportBooking::where('user_id', $user->id)
+            ->where('booking_status', 'completed')
             ->count();
 
         $wishlistCount = Wishlist::where('user_id', $user->id)->count();
 
         $recentBookings = Booking::where('user_id', $user->id)
             ->with('car')
+            ->latest()
+            ->take(3)
+            ->get();
+
+        $recentShuttleBookings = \App\Models\ShuttleBooking::where('user_id', $user->id)
+            ->with('route')
+            ->latest()
+            ->take(3)
+            ->get();
+
+        $recentAirportBookings = \App\Models\AirportBooking::where('user_id', $user->id)
+            ->with('vehicle')
             ->latest()
             ->take(3)
             ->get();
@@ -117,6 +151,8 @@ class FrontController extends Controller
             'completedBookingsCount',
             'wishlistCount',
             'recentBookings',
+            'recentShuttleBookings',
+            'recentAirportBookings',
             'user',
             'myReviews',
             'averageRating',
@@ -401,7 +437,9 @@ class FrontController extends Controller
     public function bookings()
     {
         $bookings = Booking::where('user_id', Auth::id())->with('car')->orderBy('created_at', 'desc')->get();
-        return view('front.bookings', compact('bookings'));
+        $shuttleBookings = \App\Models\ShuttleBooking::where('user_id', Auth::id())->with('route')->orderBy('created_at', 'desc')->get();
+        $airportBookings = \App\Models\AirportBooking::where('user_id', Auth::id())->with('vehicle')->orderBy('created_at', 'desc')->get();
+        return view('front.bookings', compact('bookings', 'shuttleBookings', 'airportBookings'));
     }
 
     public function bookingDetail(Booking $booking)
@@ -642,6 +680,63 @@ class FrontController extends Controller
         return view('front.contact');
     }
 
+    public function submitContact(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'message' => 'required|string'
+        ]);
+
+        ContactMessage::create($validated);
+
+        return back()->with('success', 'Pesan Anda telah berhasil dikirim! Kami akan segera menghubungi Anda.');
+    }
+
+    public function bugReport()
+    {
+        $bountyProgram = BugBountyProgram::where('is_active', true)
+            ->where(function ($query) {
+                $query->whereNull('start_date')->orWhere('start_date', '<=', now());
+            })
+            ->where(function ($query) {
+                $query->whereNull('end_date')->orWhere('end_date', '>=', now());
+            })
+            ->first();
+
+        return view('front.bug-report', compact('bountyProgram'));
+    }
+
+    public function submitBugReport(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'attachments.*' => 'nullable|file|mimes:jpeg,png,jpg,pdf,doc,docx,txt,zip|max:5120',
+        ]);
+
+        $attachments = [];
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('bug_reports', 'public');
+                $attachments[] = $path;
+            }
+        }
+
+        BugReport::create([
+            'name' => $validated['name'] ?? null,
+            'email' => $validated['email'] ?? null,
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'attachments' => $attachments,
+            'status' => 'pending',
+        ]);
+
+        return back()->with('success', 'Laporan bug berhasil dikirim. Terima kasih atas kontribusi Anda!');
+    }
+
     public function career()
     {
         $jobs = Job::where('status', 'Open')->get();
@@ -702,7 +797,270 @@ class FrontController extends Controller
 
     public function sitemap()
     {
-        return view('front.sitemap');
+        return response()->view('front.sitemap')->header('Content-Type', 'text/xml');
+    }
+
+    // --- Airport Transfer ---
+    
+    public function airportTransfer()
+    {
+        $airports = Airport::where('is_active', true)->get();
+        $zones = AirportZone::where('is_active', true)->get();
+        return view('front.airport-transfer', compact('airports', 'zones'));
+    }
+
+    public function airportTransferSearch(Request $request)
+    {
+        $request->validate([
+            'type' => 'required|in:to_airport,from_airport',
+            'airport_id' => 'required|exists:airports,id',
+            'pickup_date' => 'required|date|after_or_equal:today',
+            'city_id' => 'required',
+            'city_name' => 'required',
+        ]);
+
+        // Try to find the area based on district first, then city
+        $matchedArea = null;
+        
+        if ($request->filled('district_id')) {
+            $matchedArea = \App\Models\AirportZoneArea::where('district_id', $request->district_id)->first();
+            if (!$matchedArea && $request->filled('district_name')) {
+                $matchedArea = \App\Models\AirportZoneArea::where('district_name', $request->district_name)->first();
+            }
+        }
+
+        if (!$matchedArea) {
+            $matchedArea = \App\Models\AirportZoneArea::where('city_id', $request->city_id)->first();
+            if (!$matchedArea) {
+                $matchedArea = \App\Models\AirportZoneArea::where('city_name', $request->city_name)->first();
+            }
+        }
+
+        $zone = null;
+        if ($matchedArea) {
+            $zone = \App\Models\AirportZone::find($matchedArea->airport_zone_id);
+            $prices = AirportTransferPrice::with(['car'])
+                ->where('airport_id', $request->airport_id)
+                ->where('airport_zone_id', $zone->id)
+                ->get();
+        } else {
+            $prices = collect(); // Empty collection if no zone matched
+        }
+
+        $airport = Airport::find($request->airport_id);
+
+        return view('front.airport-transfer-search', compact('prices', 'airport', 'zone', 'matchedArea', 'request'));
+    }
+
+    public function airportTransferCheckout(Request $request, $price_id)
+    {
+        $price = AirportTransferPrice::with(['car', 'airport', 'airportZone'])->findOrFail($price_id);
+        return view('front.airport-transfer-checkout', compact('price', 'request'));
+    }
+
+    public function airportTransferStore(Request $request, $price_id)
+    {
+        $request->validate([
+            'type' => 'required|in:to_airport,from_airport',
+            'pickup_datetime' => 'required|date|after_or_equal:now',
+            'pickup_address' => 'required|string',
+            'flight_number' => 'nullable|string',
+            'customer_name' => 'required|string',
+            'customer_phone' => 'required|string',
+            'payment_method' => 'required|in:transfer,cash,whatsapp,midtrans',
+        ]);
+
+        $price = AirportTransferPrice::findOrFail($price_id);
+        
+        $bookingCode = 'APT-' . strtoupper(uniqid());
+
+        $fullAddress = $request->pickup_address;
+        if ($request->filled('full_area')) {
+            $fullAddress = $request->pickup_address . ', ' . $request->full_area;
+        }
+
+        $finalPrice = $price->price;
+        if ($request->filled('area_id')) {
+            $area = \App\Models\AirportZoneArea::find($request->area_id);
+            if ($area) {
+                $finalPrice = $price->price - $area->discount_amount;
+            }
+        }
+
+        $booking = AirportBooking::create([
+            'booking_code' => $bookingCode,
+            'user_id' => auth()->check() ? auth()->id() : null,
+            'transfer_type' => $request->type,
+            'airport_id' => $price->airport_id,
+            'airport_zone_id' => $price->airport_zone_id,
+            'car_id' => $price->car_id,
+            'pickup_datetime' => $request->pickup_datetime,
+            'pickup_address' => $fullAddress,
+            'flight_number' => $request->flight_number,
+            'customer_name' => $request->customer_name,
+            'customer_phone' => $request->customer_phone,
+            'notes' => $request->notes,
+            'total_price' => $finalPrice,
+            'payment_method' => $request->payment_method,
+            'payment_status' => 'pending',
+            'booking_status' => 'pending',
+        ]);
+
+        if ($request->payment_method == 'whatsapp') {
+            $message = "Halo, saya ingin memesan Antar Jemput Bandara:\n";
+            $message .= "Kode Booking: " . $bookingCode . "\n";
+            $message .= "Bandara: " . $price->airport->name . "\n";
+            $message .= "Area: " . $price->airportZone->name . "\n";
+            $message .= "Mobil: " . $price->car->brand . " " . $price->car->name . "\n";
+            $message .= "Tipe: " . ($request->type == 'to_airport' ? 'Ke Bandara' : 'Dari Bandara') . "\n";
+            $message .= "Waktu: " . $request->pickup_datetime . "\n";
+            $message .= "Total: Rp " . number_format($finalPrice, 0, ',', '.') . "\n";
+            
+            $waUrl = "https://wa.me/6281234567890?text=" . urlencode($message);
+            return redirect()->away($waUrl);
+        }
+
+        if ($request->payment_method == 'midtrans') {
+            try {
+                \Midtrans\Config::$serverKey = config('services.midtrans.server_key');
+                \Midtrans\Config::$isProduction = config('services.midtrans.is_production');
+                \Midtrans\Config::$isSanitized = config('services.midtrans.is_sanitized');
+                \Midtrans\Config::$is3ds = config('services.midtrans.is_3ds');
+
+                $params = [
+                    'transaction_details' => [
+                        'order_id' => $bookingCode . '-' . time(),
+                        'gross_amount' => $finalPrice,
+                    ],
+                    'customer_details' => [
+                        'first_name' => $request->customer_name,
+                        'phone' => $request->customer_phone,
+                    ],
+                    'item_details' => [
+                        [
+                            'id' => 'APT-' . $price->id,
+                            'price' => $finalPrice,
+                            'quantity' => 1,
+                            'name' => substr('Antar Jemput Bandara - ' . $price->car->name, 0, 50),
+                        ]
+                    ]
+                ];
+
+                $snapToken = \Midtrans\Snap::getSnapToken($params);
+                $booking->update([
+                    'snap_token' => $snapToken
+                ]);
+
+                return redirect()->route('airport-transfer.payment', $booking->booking_code);
+
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Midtrans Error (Airport): ' . $e->getMessage());
+                return redirect()->back()->with('error', 'Layanan pembayaran otomatis sedang gangguan. Silakan pilih metode lain.');
+            }
+        }
+
+        return redirect()->route('home')->with('success', 'Pesanan Antar Jemput Bandara berhasil dibuat! Kode: ' . $bookingCode);
+    }
+
+    public function airportTransferShow($booking_code)
+    {
+        $booking = AirportBooking::where('booking_code', $booking_code)
+            ->with(['airport', 'airportZone', 'vehicle'])
+            ->firstOrFail();
+            
+        if ($booking->user_id && $booking->user_id !== auth()->id()) {
+            abort(403);
+        }
+        
+        return view('front.airport-transfer-show', compact('booking'));
+    }
+
+    public function airportTransferPayment($booking_code)
+    {
+        $booking = AirportBooking::where('booking_code', $booking_code)->firstOrFail();
+        
+        if ($booking->user_id && $booking->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // Generate Snap Token if not exists and status is pending
+        if (!$booking->snap_token && in_array($booking->payment_status, ['pending', 'unpaid'])) {
+            try {
+                \Midtrans\Config::$serverKey = config('services.midtrans.server_key');
+                \Midtrans\Config::$isProduction = config('services.midtrans.is_production');
+                \Midtrans\Config::$isSanitized = config('services.midtrans.is_sanitized');
+                \Midtrans\Config::$is3ds = config('services.midtrans.is_3ds');
+
+                $params = [
+                    'transaction_details' => [
+                        'order_id' => 'APT-' . $booking->id . '-' . time(),
+                        'gross_amount' => $booking->total_price,
+                    ],
+                    'customer_details' => [
+                        'first_name' => $booking->customer_name,
+                        'phone' => $booking->customer_phone,
+                    ],
+                    'item_details' => [
+                        [
+                            'id' => 'APT-' . $booking->id,
+                            'price' => $booking->total_price,
+                            'quantity' => 1,
+                            'name' => substr('Antar Jemput Bandara - ' . $booking->car->name, 0, 50),
+                        ]
+                    ]
+                ];
+
+                $snapToken = \Midtrans\Snap::getSnapToken($params);
+                $booking->update([
+                    'snap_token' => $snapToken
+                ]);
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Midtrans Error (Airport): ' . $e->getMessage());
+                session()->flash('error', 'Layanan pembayaran otomatis saat ini sedang gangguan. Anda dapat memilih metode Manual atau Tunai.');
+            }
+        }
+
+        return view('front.airport-transfer-payment', compact('booking'));
+    }
+
+    public function airportTransferManualPayment(Request $request, $booking_code)
+    {
+        $booking = AirportBooking::where('booking_code', $booking_code)->firstOrFail();
+        
+        if ($booking->user_id && $booking->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'payment_method' => 'required|in:tunai,transfer_manual',
+            'selected_bank' => 'nullable|in:mandiri,bni,bca,bri',
+            'proof_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'proof_link' => 'nullable|url'
+        ]);
+
+        // Handle proof image upload
+        $proofImagePath = null;
+        if ($request->hasFile('proof_image') && $request->file('proof_image')->isValid()) {
+            $file = $request->file('proof_image');
+            $filename = 'transfer-proof-apt-' . $booking->id . '-' . time() . '.' . $file->getClientOriginalExtension();
+            $proofImagePath = $file->storeAs('transfer-proofs', $filename, 'public');
+        }
+
+        // Update booking with payment details and proof
+        $booking->update([
+            'payment_method' => $validated['payment_method'],
+            'payment_status' => 'unpaid',
+            'booking_status' => 'pending',
+            'snap_token' => null,
+            'proof_image' => $proofImagePath,
+            'proof_link' => $validated['proof_link'] ?? null
+        ]);
+
+        $message = $validated['payment_method'] == 'tunai' 
+            ? 'Anda memilih bayar tunai. Silakan lakukan pembayaran saat penjemputan.'
+            : 'Bukti transfer berhasil diunggah. Menunggu konfirmasi admin.';
+
+        return redirect()->route('airport-transfer.payment', $booking->booking_code)->with('success', $message);
     }
 
     public function cabangIndex()
@@ -823,15 +1181,42 @@ class FrontController extends Controller
             'invoice_number' => 'required|string'
         ]);
 
-        // Clean up the invoice number (remove '#', spaces, etc)
-        $invoiceId = preg_replace('/[^0-9]/', '', $request->invoice_number);
-        $booking = Booking::find((int) $invoiceId);
+        $input = strtoupper(trim($request->invoice_number));
 
-        if (!$booking) {
-            return back()->with('error', 'Dokumen tidak ditemukan atau nomor invoice tidak valid.');
+        if (str_starts_with($input, 'SH-')) {
+            $booking = \App\Models\ShuttleBooking::where('booking_code', $input)->first();
+            if ($booking) {
+                return redirect()->route('shuttle.validate', $booking->booking_code);
+            }
+        } elseif (str_starts_with($input, 'APT-')) {
+            $booking = \App\Models\AirportBooking::where('booking_code', $input)->first();
+            if ($booking) {
+                return redirect()->route('airport.validate', $booking->booking_code);
+            }
         }
 
-        return redirect()->route('invoice.validate', $booking->id);
+        // Clean up the invoice number (remove '#', spaces, etc)
+        $invoiceId = preg_replace('/[^0-9]/', '', $input);
+        if ($invoiceId) {
+            $booking = Booking::find((int) $invoiceId);
+            if ($booking) {
+                return redirect()->route('invoice.validate', $booking->id);
+            }
+        }
+
+        return back()->with('error', 'Dokumen tidak ditemukan atau nomor pesanan/invoice tidak valid.');
+    }
+
+    public function validateShuttle($booking_code)
+    {
+        $booking = \App\Models\ShuttleBooking::where('booking_code', $booking_code)->with('route')->firstOrFail();
+        return view('front.shuttle_validation', compact('booking'));
+    }
+
+    public function validateAirport($booking_code)
+    {
+        $booking = \App\Models\AirportBooking::where('booking_code', $booking_code)->with(['airport', 'airportZone', 'vehicle'])->firstOrFail();
+        return view('front.airport_validation', compact('booking'));
     }
 
     /**

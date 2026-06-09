@@ -1,7 +1,7 @@
 <x-front-layout>
     <!-- Tambahkan skrip Midtrans di head -->
     @push('scripts')
-        <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
+        <script src="{{ config('services.midtrans.is_production') ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js' }}" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
     @endpush
 
     <div class="bg-slate-50 py-12 min-h-screen">
@@ -104,6 +104,7 @@
                         targetTime: {{ \Carbon\Carbon::parse($booking->created_at)->addHours(24)->timestamp * 1000 }},
                         timeLeft: 'Memuat...',
                         timerExpired: false,
+                        previewUrl: null,
                         init() {
                             this.updateTimer();
                             setInterval(() => this.updateTimer(), 1000);
@@ -280,9 +281,14 @@
                                         <span class="text-sm font-bold text-slate-900">📤 Pilih Gambar</span>
                                         <span class="text-xs text-slate-500 mt-1">atau drag & drop</span>
                                         <span class="text-xs text-slate-400 mt-2">PNG, JPG, JPEG (Max 5MB)</span>
-                                        <input type="file" name="proof_image" accept="image/*" class="hidden" id="proof_image_input" @change="document.querySelector('#proof_image_name').textContent = this.files[0]?.name || 'Tidak ada file dipilih'">
+                                        <input type="file" name="proof_image" form="manual-payment-form" accept="image/*" class="hidden" id="proof_image_input" @change="let file = $event.target.files[0]; document.querySelector('#proof_image_name').textContent = file?.name || 'Tidak ada file dipilih'; if(file) { let reader = new FileReader(); reader.onload = (e) => { previewUrl = e.target.result }; reader.readAsDataURL(file); } else { previewUrl = null; }">
                                     </label>
                                     <div id="proof_image_name" class="text-xs text-slate-500 mt-3 text-center">Tidak ada file dipilih</div>
+                                    
+                                    <!-- Image Preview -->
+                                    <div x-show="previewUrl" style="display: none;" class="mt-4 flex justify-center">
+                                        <img :src="previewUrl" alt="Preview Bukti Transfer" class="max-h-48 rounded-lg shadow-md border border-slate-200">
+                                    </div>
                                 </div>
 
                                 <!-- Atau -->
@@ -295,7 +301,7 @@
                                 <!-- Link Input -->
                                 <div>
                                     <label class="block text-sm font-bold text-slate-900 mb-2">🔗 Link Bukti Transfer</label>
-                                    <input type="url" name="proof_link" placeholder="https://contoh.com/gambar-bukti.jpg" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent">
+                                    <input type="url" name="proof_link" form="manual-payment-form" placeholder="https://contoh.com/gambar-bukti.jpg" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent">
                                     <p class="text-xs text-slate-500 mt-2">Anda bisa upload ke Google Drive, Dropbox, atau imgur lalu share link-nya</p>
                                 </div>
                             </div>
@@ -319,7 +325,7 @@
                                 @endif
 
                                 <!-- Manual Form -->
-                                <form x-show="method !== 'midtrans'" style="display: none;" action="{{ route('payment.manual', $booking) }}" method="POST" enctype="multipart/form-data" class="w-full">
+                                <form id="manual-payment-form" x-show="method !== 'midtrans'" style="display: none;" action="{{ route('payment.manual', $booking) }}" method="POST" enctype="multipart/form-data" class="w-full">
                                     @csrf
                                     <input type="hidden" name="payment_method" :value="method">
                                     <input type="hidden" name="selected_bank" x-model="selectedBank">

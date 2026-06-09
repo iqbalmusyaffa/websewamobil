@@ -4,7 +4,8 @@
         <!-- Background Video -->
         <div class="absolute inset-0 z-0">
             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-80">
-                <source src="https://videos.pexels.com/video-files/3209300/3209300-uhd_2560_1440_25fps.mp4" type="video/mp4">
+                {{-- <source src="https://videos.pexels.com/video-files/3209300/3209300-uhd_2560_1440_25fps.mp4" type="video/mp4"> --}}
+                    <source src="https://www.pexels.com/id-id/download/video/36330665/" type="video/mp4">
             </video>
             <div class="absolute inset-0 bg-slate-900/60 mix-blend-multiply"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent"></div>
@@ -25,16 +26,43 @@
                 <p class="mt-4 text-lg md:text-xl text-slate-200 max-w-2xl mx-auto lg:mx-0 mb-10 leading-relaxed font-light drop-shadow">
                     Sewa kendaraan premium dengan mudah dan aman. Baik untuk urusan bisnis, liburan keluarga, atau acara khusus, kami menjamin kenyamanan sempurna di setiap kilometer.
                 </p>
-                        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10">
                             <a href="{{ route('cars.index') }}" class="inline-flex justify-center items-center px-8 py-4 border border-transparent text-base font-bold rounded-full text-slate-900 bg-white hover:bg-sky-50 shadow-lg shadow-white/20 transition-all duration-300 transform hover:-translate-y-1 hover:scale-105">
                                 Pesan Sekarang
                             </a>
                             <a href="#about" class="inline-flex justify-center items-center px-8 py-4 border border-white/30 backdrop-blur-sm text-base font-bold rounded-full text-white hover:bg-white/10 transition-all duration-300">
                                 Pelajari Lebih Lanjut
                             </a>
-                </div>
+                        </div>
+                        
+                        <!-- Layanan Shortcuts -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:pr-8 text-left mt-8 lg:mt-0">
+                            <a href="{{ route('cars.index') }}" class="bg-white/10 backdrop-blur-md border border-white/10 p-5 rounded-3xl hover:bg-white/20 hover:-translate-y-1 transition-all duration-300 group shadow-xl shadow-black/10">
+                                <div class="w-12 h-12 bg-sky-500 rounded-2xl flex items-center justify-center mb-4 shadow-inner group-hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                                </div>
+                                <h3 class="text-white font-bold text-lg mb-1 group-hover:text-sky-300 transition-colors">Sewa Mobil</h3>
+                                <p class="text-slate-300 text-sm">Harian, bulanan & lepas kunci</p>
+                            </a>
+                            <a href="{{ route('airport-transfer') }}" class="bg-white/10 backdrop-blur-md border border-white/10 p-5 rounded-3xl hover:bg-white/20 hover:-translate-y-1 transition-all duration-300 group shadow-xl shadow-black/10 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 bg-emerald-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl z-10">BARU</div>
+                                <div class="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center mb-4 shadow-inner group-hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                </div>
+                                <h3 class="text-white font-bold text-lg mb-1 group-hover:text-emerald-300 transition-colors">Antar Bandara</h3>
+                                <p class="text-slate-300 text-sm">Transfer eksklusif bandara</p>
+                            </a>
+                            <a href="{{ route('shuttle.index') }}" class="bg-white/10 backdrop-blur-md border border-white/10 p-5 rounded-3xl hover:bg-white/20 hover:-translate-y-1 transition-all duration-300 group shadow-xl shadow-black/10 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 bg-amber-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl z-10">BARU</div>
+                                <div class="w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center mb-4 shadow-inner group-hover:scale-110 transition-transform">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                                </div>
+                                <h3 class="text-white font-bold text-lg mb-1 group-hover:text-amber-300 transition-colors">Travel Shuttle</h3>
+                                <p class="text-slate-300 text-sm">Rute antar kota & bandara (per kursi)</p>
+                            </a>
+                        </div>
             </div>
-            
+
             <!-- Quick search/stats card right side -->
             <div class="hidden lg:block w-full lg:w-2/5 mt-12 lg:mt-0 relative">
                 <div class="absolute -inset-4 bg-sky-500/20 rounded-[3rem] blur-2xl animate-pulse"></div>
@@ -136,7 +164,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="relative z-10">
                     <div class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-sky-50 text-sky-600 mb-6 border border-sky-100">
                         Tentang AutoRent
@@ -147,7 +175,7 @@
                     <p class="mt-6 text-lg text-slate-500 leading-relaxed font-light">
                         Sejak didirikan pada tahun 2009, AutoRent berkomitmen untuk memberikan pengalaman mobilitas terbaik. Kami tidak sekadar menyewakan mobil; kami memberikan solusi transportasi yang dapat diandalkan, nyaman, dan aman untuk setiap langkah perjalanan Anda.
                     </p>
-                    
+
                     <div class="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-lg shadow-slate-100/50 hover:shadow-xl hover:border-sky-100 transition-all duration-300 group">
                             <div class="w-12 h-12 bg-sky-50 rounded-[1rem] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -164,7 +192,7 @@
                             <p class="text-slate-500 text-sm leading-relaxed">Menyediakan armada berkualitas tinggi yang higienis, aman, dan terjangkau.</p>
                         </div>
                     </div>
-                    
+
                     <div class="mt-10">
                         <a href="{{ route('about') }}" class="inline-flex items-center px-6 py-3 bg-slate-900 text-white font-bold rounded-full hover:bg-sky-600 transition-all duration-300 transform hover:-translate-y-1 shadow-lg shadow-slate-900/20">
                             Baca Cerita Kami Selengkapnya
@@ -224,7 +252,7 @@
                                     <p class="text-sm font-medium text-slate-500 mt-1">{{ $car->type ?? 'Premium' }}</p>
                                 </div>
                             </div>
-                            
+
                             <div class="grid grid-cols-2 gap-y-3 gap-x-2 py-5 border-y border-slate-100 mb-6 flex-1 bg-slate-50/50 rounded-2xl px-4 mt-2">
                                 <div class="flex items-center text-sm font-medium text-slate-600">
                                     <svg class="w-5 h-5 text-sky-500 mr-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
@@ -243,7 +271,7 @@
                                     Terlindungi
                                 </div>
                             </div>
-                            
+
                             <div class="flex items-end justify-between mt-auto pt-2">
                                 <div>
                                     <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Mulai dari</p>
@@ -257,6 +285,274 @@
                     </div>
                 @endforeach
             </div>
+        </div>
+    </div>
+
+    @if(isset($airportTransfers) && $airportTransfers->count() > 0)
+    <!-- Airport Transfers Section -->
+    <div id="airport-transfers" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+                <div class="max-w-2xl">
+                    <div class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-emerald-100 text-emerald-700 mb-4 border border-emerald-200">
+                        Antar Jemput Bandara
+                    </div>
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900">
+                        Antar Jemput Eksklusif Bandara
+                    </h2>
+                    <p class="mt-4 text-xl text-slate-500 font-light">
+                        Nikmati perjalanan nyaman dari dan ke bandara dengan armada terbaik kami (sewa per mobil, bukan per kursi).
+                    </p>
+                </div>
+                <div class="flex-shrink-0">
+                    <a href="{{ route('airport-transfer') }}" class="inline-flex items-center px-6 py-3 bg-white border border-slate-200 text-slate-900 font-bold rounded-full hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all duration-300 shadow-sm">
+                        Lihat Seluruh Rute
+                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                @foreach($airportTransfers as $transfer)
+                    <div class="bg-white overflow-hidden rounded-[2.5rem] shadow-lg shadow-slate-200/50 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group flex flex-col h-full border border-slate-100">
+                        <div class="relative h-64 overflow-hidden bg-slate-100 m-2.5 rounded-[2rem]">
+                            <img class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700" src="{{ $transfer->car->image_url ?? 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80' }}" alt="{{ $transfer->airport->name ?? 'Bandara' }}">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <div class="absolute top-4 left-4 flex flex-col gap-2">
+                                <div class="bg-emerald-500 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm border border-emerald-400 self-start">
+                                    {{ $transfer->airport->code ?? 'AIR' }}
+                                </div>
+                                <div class="bg-sky-500 text-white px-3 py-1 rounded-full text-[10px] font-bold shadow-sm border border-sky-400 self-start uppercase tracking-wider">
+                                    Mobil Privat
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="text-2xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">{{ $transfer->airportZone->name ?? 'Zona Bandara' }}</h3>
+                                    <p class="text-sm font-medium text-slate-500 mt-1">ke/dari {{ $transfer->airport->name ?? 'Bandara' }}</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-y-3 py-5 border-y border-slate-100 mb-6 flex-1 bg-slate-50/50 rounded-2xl px-4 mt-2">
+                                <div class="flex items-center text-sm font-medium text-slate-600">
+                                    <svg class="w-5 h-5 text-emerald-500 mr-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                                    Armada: {{ $transfer->car->name ?? 'Premium Car' }}
+                                </div>
+                                <div class="flex items-center text-sm font-medium text-slate-600">
+                                    <svg class="w-5 h-5 text-emerald-500 mr-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                    Maks. {{ $transfer->car->capacity ?? 4 }} Penumpang
+                                </div>
+                                <div class="flex items-center text-sm font-medium text-slate-600">
+                                    <svg class="w-5 h-5 text-emerald-500 mr-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                    Termasuk Sopir & BBM
+                                </div>
+                                <div class="flex items-center text-sm font-bold text-sky-600">
+                                    <svg class="w-5 h-5 text-sky-500 mr-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    Layanan Privat 1 Mobil
+                                </div>
+                            </div>
+
+                            <div class="flex items-end justify-between mt-auto pt-2">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Tarif</p>
+                                    <p class="text-2xl font-extrabold text-slate-900">Rp {{ number_format($transfer->price, 0, ',', '.') }}<span class="text-sm font-medium text-slate-500">/ mobil</span></p>
+                                </div>
+                                <a href="{{ route('airport-transfer') }}" class="inline-flex items-center justify-center w-12 h-12 bg-slate-900 text-white rounded-[1rem] hover:bg-emerald-600 transition-colors shadow-lg shadow-slate-900/20 group-hover:scale-110">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    @endif
+
+    @if(isset($shuttles) && $shuttles->count() > 0)
+    <!-- Shuttle Routes Section -->
+    <div id="shuttles" class="py-24 bg-slate-50 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+                <div class="max-w-2xl">
+                    <div class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-amber-100 text-amber-700 mb-4 border border-amber-200">
+                        Travel Shuttle
+                    </div>
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900">
+                        Rute Antar Kota
+                    </h2>
+                    <p class="mt-4 text-xl text-slate-500 font-light">
+                        Perjalanan antar kota dan akses ke bandara yang nyaman, aman, dan hemat dengan jadwal pasti (harga per kursi).
+                    </p>
+                </div>
+                <div class="flex-shrink-0">
+                    <a href="{{ route('shuttle.index') }}" class="inline-flex items-center px-6 py-3 bg-white border border-slate-200 text-slate-900 font-bold rounded-full hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all duration-300 shadow-sm">
+                        Lihat Semua Rute
+                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                @foreach($shuttles as $shuttle)
+                    <div class="bg-white overflow-hidden rounded-[2.5rem] shadow-lg shadow-slate-200/50 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group flex flex-col h-full border border-slate-100">
+                        <div class="relative h-64 overflow-hidden bg-slate-100 m-2.5 rounded-[2rem]">
+                            <img class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="{{ $shuttle->origin_city }} ke {{ $shuttle->destination_city }}">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <div class="absolute top-4 left-4 bg-amber-500 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm border border-amber-400 uppercase">
+                                {{ $shuttle->class_type ?? 'Eksekutif' }}
+                            </div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="text-2xl font-bold text-slate-900 group-hover:text-amber-600 transition-colors">{{ $shuttle->origin_city }} <svg class="inline-block w-5 h-5 mx-1 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg> {{ $shuttle->destination_city }}</h3>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-y-3 py-5 border-y border-slate-100 mb-6 flex-1 bg-slate-50/50 rounded-2xl px-4 mt-2">
+                                <div class="flex items-center text-sm font-medium text-slate-600">
+                                    <svg class="w-5 h-5 text-amber-500 mr-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Berangkat: {{ \Carbon\Carbon::parse($shuttle->departure_time)->format('H:i') }}
+                                </div>
+                                <div class="flex items-center text-sm font-bold text-sky-600">
+                                    <svg class="w-5 h-5 text-sky-500 mr-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Tersedia Rute Bandara
+                                </div>
+                                <div class="flex items-center text-sm font-medium text-slate-600">
+                                    <svg class="w-5 h-5 text-amber-500 mr-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    Tiba (Est): {{ \Carbon\Carbon::parse($shuttle->arrival_time)->format('H:i') }}
+                                </div>
+                                <div class="flex items-center text-sm font-medium text-slate-600">
+                                    <svg class="w-5 h-5 text-amber-500 mr-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                    Kapasitas {{ $shuttle->total_seats }} Kursi
+                                </div>
+                            </div>
+
+                            <div class="flex items-end justify-between mt-auto pt-2">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Harga Tiket</p>
+                                    <p class="text-2xl font-extrabold text-slate-900">Rp {{ number_format($shuttle->base_price, 0, ',', '.') }}<span class="text-sm font-medium text-slate-500">/kursi</span></p>
+                                </div>
+                                <a href="{{ route('shuttle.index') }}" class="inline-flex items-center justify-center w-12 h-12 bg-slate-900 text-white rounded-[1rem] hover:bg-amber-600 transition-colors shadow-lg shadow-slate-900/20 group-hover:scale-110">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    @endif
+
+    <!-- Comparison Section -->
+    <div class="py-24 bg-white relative border-t border-slate-100">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-slate-100 text-slate-700 mb-4 border border-slate-200">
+                    Bandingkan Layanan
+                </div>
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mb-4">
+                    Bingung Memilih Layanan?
+                </h2>
+                <p class="text-lg text-slate-500 max-w-2xl mx-auto font-light">
+                    Bandingkan layanan <span class="font-bold text-emerald-600">Antar Jemput Bandara</span> dan <span class="font-bold text-amber-600">Travel Shuttle</span> untuk menemukan yang paling sesuai dengan kebutuhan Anda.
+                </p>
+            </div>
+
+            <div class="block md:hidden text-center mb-4 animate-pulse">
+                <span class="inline-flex items-center gap-2 text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                    Geser tabel ke kiri/kanan
+                </span>
+            </div>
+            
+            <div class="w-full overflow-x-auto pb-8 snap-x">
+                <div class="bg-white rounded-[2.5rem] shadow-xl border border-slate-100 overflow-hidden min-w-[800px] w-max mx-auto">
+                    <div class="grid grid-cols-3 bg-slate-50 border-b border-slate-200">
+                    <div class="p-6 md:p-8 flex items-center justify-center border-r border-slate-200">
+                        <span class="font-bold text-slate-400 text-sm uppercase tracking-wider">Fitur Utama</span>
+                    </div>
+                    <div class="p-6 md:p-8 text-center border-r border-slate-200 bg-emerald-50/30">
+                        <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        </div>
+                        <h3 class="font-extrabold text-slate-900 text-lg">Antar Jemput Bandara</h3>
+                        <p class="text-xs text-emerald-600 font-semibold mt-1">Eksklusif & Bebas Repot</p>
+                        <div class="mt-3 inline-block bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-[10px] font-bold uppercase tracking-wider py-1 px-3 rounded-full shadow-sm">
+                            🏆 Cocok Untuk Keluarga
+                        </div>
+                    </div>
+                    <div class="p-6 md:p-8 text-center bg-amber-50/30">
+                        <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        </div>
+                        <h3 class="font-extrabold text-slate-900 text-lg">Travel Shuttle</h3>
+                        <p class="text-xs text-amber-600 font-semibold mt-1">Pilihan Hemat & Cerdas</p>
+                        <div class="mt-3 inline-block bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] font-bold uppercase tracking-wider py-1 px-3 rounded-full shadow-sm">
+                            💡 Cocok Untuk Solo Traveler
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rows -->
+                <div class="grid grid-cols-3 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                    <div class="p-6 font-medium text-slate-700 flex items-center border-r border-slate-100">
+                        <span class="mr-3 text-xl">💰</span> Sistem Tarif
+                    </div>
+                    <div class="p-6 text-center border-r border-slate-100 flex items-center justify-center">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-emerald-100 text-emerald-700">Flat Per Mobil</span>
+                    </div>
+                    <div class="p-6 text-center flex items-center justify-center">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-amber-100 text-amber-700">Hemat Per Kursi</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                    <div class="p-6 font-medium text-slate-700 flex items-center border-r border-slate-100">
+                        <span class="mr-3 text-xl">🛡️</span> Tingkat Privasi
+                    </div>
+                    <div class="p-6 text-center text-slate-600 border-r border-slate-100 text-sm flex items-center justify-center font-medium">VIP Privat (100% Untuk Rombongan Anda)</div>
+                    <div class="p-6 text-center text-slate-600 text-sm flex items-center justify-center font-medium">Smart Sharing (Bersama Teman Seperjalanan)</div>
+                </div>
+
+                <div class="grid grid-cols-3 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                    <div class="p-6 font-medium text-slate-700 flex items-center border-r border-slate-100">
+                        <span class="mr-3 text-xl">🗺️</span> Rute Layanan
+                    </div>
+                    <div class="p-6 text-center text-slate-600 border-r border-slate-100 text-sm flex items-center justify-center font-medium">Direct (Jemput/Antar Langsung Bandara)</div>
+                    <div class="p-6 text-center text-slate-600 text-sm flex items-center justify-center font-medium">Lintas Kota & Bandara (Door to Door)</div>
+                </div>
+
+                <div class="grid grid-cols-3 hover:bg-slate-50 transition-colors">
+                    <div class="p-6 font-medium text-slate-700 flex items-center border-r border-slate-100">
+                        <span class="mr-3 text-xl">🧳</span> Kapasitas Bawaan
+                    </div>
+                    <div class="p-6 text-center text-slate-600 border-r border-slate-100 text-sm flex items-center justify-center font-medium">Bebas Maksimal (Muat banyak sepuasnya)</div>
+                    <div class="p-6 text-center text-slate-600 text-sm flex items-center justify-center font-medium">Praktis & Ringkas (1 Koper + 1 Tas Kabin)</div>
+                </div>
+                </div>
+
+                <!-- Call to action row -->
+                <div class="grid grid-cols-3 bg-slate-50/50 border-t border-slate-200">
+                    <div class="p-6 flex items-center justify-center border-r border-slate-200">
+                        <span class="font-bold text-slate-400 text-sm uppercase tracking-wider">Pilih Layanan</span>
+                    </div>
+                    <div class="p-6 text-center border-r border-slate-200 bg-emerald-50/10">
+                        <a href="{{ route('airport-transfer') }}" class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-sm font-bold rounded-xl text-white bg-emerald-500 hover:bg-emerald-600 shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:-translate-y-0.5 w-full max-w-[200px]">
+                            Pesan Privat
+                        </a>
+                    </div>
+                    <div class="p-6 text-center bg-amber-50/10">
+                        <a href="{{ route('shuttle.index') }}" class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-sm font-bold rounded-xl text-white bg-amber-500 hover:bg-amber-600 shadow-lg shadow-amber-500/30 transition-all duration-300 hover:-translate-y-0.5 w-full max-w-[200px]">
+                            Pesan Shuttle
+                        </a>
+                </div>
+            </div>
+            </div> <!-- Close overflow wrapper -->
         </div>
     </div>
 
@@ -282,7 +578,7 @@
                 <div class="{{ $index % 2 == 0 ? 'bg-gradient-to-br from-sky-500 to-blue-700' : 'bg-gradient-to-br from-slate-800 to-slate-900' }} rounded-[2.5rem] p-8 md:p-12 text-white relative overflow-hidden group shadow-2xl {{ $index % 2 == 0 ? 'shadow-sky-900/20' : 'shadow-slate-900/20' }}">
                     <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none"></div>
                     <div class="absolute -right-20 -bottom-20 w-64 h-64 {{ $index % 2 == 0 ? 'bg-white/20' : 'bg-rose-500/20' }} rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
-                    
+
                     <div class="relative z-10 w-full md:w-5/6">
                         <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md border border-white/30 rounded-full text-[10px] font-black tracking-widest mb-6 uppercase">KODE: {{ $promo->code }}</span>
                         <h3 class="text-3xl md:text-4xl font-extrabold mb-4 leading-tight">
@@ -305,23 +601,37 @@
     @endif
 
     <!-- How it Works Section -->
-    <div class="py-24 bg-white relative overflow-hidden">
+    <div class="py-24 bg-white relative overflow-hidden" x-data="{ activeTab: 'sewa' }">
         <div class="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-sky-100 rounded-full blur-[100px] opacity-60"></div>
         <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-96 h-96 bg-blue-100 rounded-full blur-[100px] opacity-60"></div>
-        
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center mb-20">
+            <div class="text-center mb-12">
                 <div class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-sky-50 text-sky-600 mb-4 border border-sky-100">
                     Cara Kerja
                 </div>
-                <h3 class="mt-2 text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900">Sewa Mobil Semudah <span class="text-sky-600">1-2-3-4</span></h3>
-                <p class="mt-6 text-xl text-slate-500 max-w-2xl mx-auto font-light">Kami menyederhanakan proses penyewaan mobil agar Anda bisa segera menikmati perjalanan tanpa ribet.</p>
+                <h3 class="mt-2 text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900">Pesan Layanan Semudah <span class="text-sky-600">1-2-3-4</span></h3>
+                <p class="mt-6 text-xl text-slate-500 max-w-2xl mx-auto font-light">Kami menyederhanakan proses pemesanan agar Anda bisa segera menikmati perjalanan tanpa ribet.</p>
             </div>
 
-            <div class="relative">
-                <!-- Connecting Line (hidden on mobile) -->
+            <!-- Tabs -->
+            <div class="flex justify-center mb-16 relative z-20">
+                <div class="inline-flex flex-col sm:flex-row bg-slate-100 rounded-2xl sm:rounded-full p-1.5 gap-1">
+                    <button @click="activeTab = 'sewa'" :class="{'bg-white text-slate-900 shadow-sm': activeTab === 'sewa', 'text-slate-500 hover:text-slate-700': activeTab !== 'sewa'}" class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 w-full sm:w-auto text-center">
+                        Sewa Mobil
+                    </button>
+                    <button @click="activeTab = 'bandara'" :class="{'bg-white text-slate-900 shadow-sm': activeTab === 'bandara', 'text-slate-500 hover:text-slate-700': activeTab !== 'bandara'}" class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 w-full sm:w-auto text-center">
+                        Antar Jemput Bandara
+                    </button>
+                    <button @click="activeTab = 'shuttle'" :class="{'bg-white text-slate-900 shadow-sm': activeTab === 'shuttle', 'text-slate-500 hover:text-slate-700': activeTab !== 'shuttle'}" class="px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 w-full sm:w-auto text-center">
+                        Travel Shuttle
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sewa Mobil Tab -->
+            <div x-show="activeTab === 'sewa'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-4" x-transition:enter-end="opacity-100 transform translate-y-0" class="relative">
                 <div class="hidden lg:block absolute top-12 left-[10%] right-[10%] h-1 bg-gradient-to-r from-sky-100 via-sky-300 to-sky-100 rounded-full" aria-hidden="true"></div>
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
                     <!-- Step 1 -->
                     <div class="relative text-center group">
@@ -335,7 +645,6 @@
                         <h4 class="mt-8 text-xl font-bold text-slate-900">Pilih Mobil</h4>
                         <p class="mt-3 text-sm text-slate-500 leading-relaxed font-light">Jelajahi katalog kami dan temukan mobil yang paling sesuai dengan kebutuhan perjalanan Anda.</p>
                     </div>
-
                     <!-- Step 2 -->
                     <div class="relative text-center group">
                         <div class="w-24 h-24 mx-auto bg-white border-4 border-white rounded-[2rem] flex items-center justify-center relative z-10 shadow-xl shadow-sky-100 group-hover:-translate-y-2 transition-transform duration-300">
@@ -348,7 +657,6 @@
                         <h4 class="mt-8 text-xl font-bold text-slate-900">Tentukan Tanggal</h4>
                         <p class="mt-3 text-sm text-slate-500 leading-relaxed font-light">Pilih tanggal pengambilan dan pengembalian, serta lengkapi data pemesanan Anda.</p>
                     </div>
-
                     <!-- Step 3 -->
                     <div class="relative text-center group">
                         <div class="w-24 h-24 mx-auto bg-white border-4 border-white rounded-[2rem] flex items-center justify-center relative z-10 shadow-xl shadow-sky-100 group-hover:-translate-y-2 transition-transform duration-300">
@@ -361,7 +669,6 @@
                         <h4 class="mt-8 text-xl font-bold text-slate-900">Pembayaran Aman</h4>
                         <p class="mt-3 text-sm text-slate-500 leading-relaxed font-light">Lakukan pembayaran dengan metode pilihan Anda. Kami mendukung berbagai sistem pembayaran digital.</p>
                     </div>
-
                     <!-- Step 4 -->
                     <div class="relative text-center group">
                         <div class="w-24 h-24 mx-auto bg-white border-4 border-white rounded-[2rem] flex items-center justify-center relative z-10 shadow-xl shadow-sky-100 group-hover:-translate-y-2 transition-transform duration-300">
@@ -373,6 +680,116 @@
                         </div>
                         <h4 class="mt-8 text-xl font-bold text-slate-900">Mulai Perjalanan</h4>
                         <p class="mt-3 text-sm text-slate-500 leading-relaxed font-light">Ambil mobil di titik yang disepakati atau gunakan layanan antar kendaraan kami ke lokasi Anda.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Antar Jemput Bandara Tab -->
+            <div x-show="activeTab === 'bandara'" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-4" x-transition:enter-end="opacity-100 transform translate-y-0" class="relative">
+                <div class="hidden lg:block absolute top-12 left-[10%] right-[10%] h-1 bg-gradient-to-r from-sky-100 via-sky-300 to-sky-100 rounded-full" aria-hidden="true"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+                    <!-- Step 1 -->
+                    <div class="relative text-center group">
+                        <div class="w-24 h-24 mx-auto bg-white border-4 border-white rounded-[2rem] flex items-center justify-center relative z-10 shadow-xl shadow-emerald-100 group-hover:-translate-y-2 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-[1.7rem] -z-10"></div>
+                            <span class="text-emerald-600">
+                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </span>
+                            <div class="absolute -top-4 -right-4 w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white font-black text-lg shadow-lg border-4 border-white">1</div>
+                        </div>
+                        <h4 class="mt-8 text-xl font-bold text-slate-900">Pilih Rute Bandara</h4>
+                        <p class="mt-3 text-sm text-slate-500 leading-relaxed font-light">Cari opsi perjalanan antar jemput berdasarkan bandara atau zona lokasi Anda (sewa per mobil).</p>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="relative text-center group">
+                        <div class="w-24 h-24 mx-auto bg-white border-4 border-white rounded-[2rem] flex items-center justify-center relative z-10 shadow-xl shadow-emerald-100 group-hover:-translate-y-2 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-[1.7rem] -z-10"></div>
+                            <span class="text-emerald-600">
+                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </span>
+                            <div class="absolute -top-4 -right-4 w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white font-black text-lg shadow-lg border-4 border-white">2</div>
+                        </div>
+                        <h4 class="mt-8 text-xl font-bold text-slate-900">Data Penerbangan</h4>
+                        <p class="mt-3 text-sm text-slate-500 leading-relaxed font-light">Masukkan nomor penerbangan, tanggal, dan waktu untuk kepastian jadwal jemput.</p>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="relative text-center group">
+                        <div class="w-24 h-24 mx-auto bg-white border-4 border-white rounded-[2rem] flex items-center justify-center relative z-10 shadow-xl shadow-emerald-100 group-hover:-translate-y-2 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-[1.7rem] -z-10"></div>
+                            <span class="text-emerald-600">
+                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                            </span>
+                            <div class="absolute -top-4 -right-4 w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white font-black text-lg shadow-lg border-4 border-white">3</div>
+                        </div>
+                        <h4 class="mt-8 text-xl font-bold text-slate-900">Pembayaran Aman</h4>
+                        <p class="mt-3 text-sm text-slate-500 leading-relaxed font-light">Lakukan pembayaran dengan metode pilihan Anda secara mudah dan instan.</p>
+                    </div>
+                    <!-- Step 4 -->
+                    <div class="relative text-center group">
+                        <div class="w-24 h-24 mx-auto bg-white border-4 border-white rounded-[2rem] flex items-center justify-center relative z-10 shadow-xl shadow-emerald-100 group-hover:-translate-y-2 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-[1.7rem] -z-10"></div>
+                            <span class="text-emerald-600">
+                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            </span>
+                            <div class="absolute -top-4 -right-4 w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white font-black text-lg shadow-lg border-4 border-white">4</div>
+                        </div>
+                        <h4 class="mt-8 text-xl font-bold text-slate-900">Berangkat Bebas Repot</h4>
+                        <p class="mt-3 text-sm text-slate-500 leading-relaxed font-light">Sopir kami akan menunggu di titik temu yang disepakati tepat pada waktunya.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Travel Shuttle Tab -->
+            <div x-show="activeTab === 'shuttle'" style="display: none;" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-y-4" x-transition:enter-end="opacity-100 transform translate-y-0" class="relative">
+                <div class="hidden lg:block absolute top-12 left-[10%] right-[10%] h-1 bg-gradient-to-r from-sky-100 via-sky-300 to-sky-100 rounded-full" aria-hidden="true"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+                    <!-- Step 1 -->
+                    <div class="relative text-center group">
+                        <div class="w-24 h-24 mx-auto bg-white border-4 border-white rounded-[2rem] flex items-center justify-center relative z-10 shadow-xl shadow-amber-100 group-hover:-translate-y-2 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-br from-amber-50 to-orange-50 rounded-[1.7rem] -z-10"></div>
+                            <span class="text-amber-600">
+                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            </span>
+                            <div class="absolute -top-4 -right-4 w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white font-black text-lg shadow-lg border-4 border-white">1</div>
+                        </div>
+                        <h4 class="mt-8 text-xl font-bold text-slate-900">Pilih Rute Kota</h4>
+                        <p class="mt-3 text-sm text-slate-500 leading-relaxed font-light">Tentukan rute antar kota yang sesuai dengan tujuan keberangkatan Anda.</p>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="relative text-center group">
+                        <div class="w-24 h-24 mx-auto bg-white border-4 border-white rounded-[2rem] flex items-center justify-center relative z-10 shadow-xl shadow-amber-100 group-hover:-translate-y-2 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-br from-amber-50 to-orange-50 rounded-[1.7rem] -z-10"></div>
+                            <span class="text-amber-600">
+                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </span>
+                            <div class="absolute -top-4 -right-4 w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white font-black text-lg shadow-lg border-4 border-white">2</div>
+                        </div>
+                        <h4 class="mt-8 text-xl font-bold text-slate-900">Pesan Kursi</h4>
+                        <p class="mt-3 text-sm text-slate-500 leading-relaxed font-light">Pilih jadwal keberangkatan dan tentukan jumlah kursi yang ingin Anda pesan.</p>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="relative text-center group">
+                        <div class="w-24 h-24 mx-auto bg-white border-4 border-white rounded-[2rem] flex items-center justify-center relative z-10 shadow-xl shadow-amber-100 group-hover:-translate-y-2 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-br from-amber-50 to-orange-50 rounded-[1.7rem] -z-10"></div>
+                            <span class="text-amber-600">
+                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                            </span>
+                            <div class="absolute -top-4 -right-4 w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white font-black text-lg shadow-lg border-4 border-white">3</div>
+                        </div>
+                        <h4 class="mt-8 text-xl font-bold text-slate-900">Pembayaran Cepat</h4>
+                        <p class="mt-3 text-sm text-slate-500 leading-relaxed font-light">Selesaikan pembayaran untuk mengamankan tiket keberangkatan Anda.</p>
+                    </div>
+                    <!-- Step 4 -->
+                    <div class="relative text-center group">
+                        <div class="w-24 h-24 mx-auto bg-white border-4 border-white rounded-[2rem] flex items-center justify-center relative z-10 shadow-xl shadow-amber-100 group-hover:-translate-y-2 transition-transform duration-300">
+                            <div class="absolute inset-0 bg-gradient-to-br from-amber-50 to-orange-50 rounded-[1.7rem] -z-10"></div>
+                            <span class="text-amber-600">
+                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </span>
+                            <div class="absolute -top-4 -right-4 w-10 h-10 bg-slate-900 rounded-full flex items-center justify-center text-white font-black text-lg shadow-lg border-4 border-white">4</div>
+                        </div>
+                        <h4 class="mt-8 text-xl font-bold text-slate-900">Tiba di Lokasi</h4>
+                        <p class="mt-3 text-sm text-slate-500 leading-relaxed font-light">Datanglah ke titik kumpul keberangkatan tepat waktu dan nikmati perjalanan.</p>
                     </div>
                 </div>
             </div>
@@ -388,7 +805,7 @@
                 </div>
                 <h3 class="mt-2 text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900">Pertanyaan <span class="text-sky-600">Sering Diajukan</span></h3>
             </div>
-            
+
             <div class="space-y-5" x-data="{selected: null}">
                 <!-- FAQ Item 1 -->
                 <div class="bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
@@ -435,7 +852,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="text-center mt-12">
                 <a href="{{ route('faq') }}" class="inline-flex items-center px-8 py-4 bg-white border border-slate-200 text-slate-900 font-bold rounded-full hover:bg-slate-50 hover:border-slate-300 transition-all duration-300 shadow-sm">
                     Lihat Semua FAQ
@@ -495,7 +912,7 @@
                         setInterval(() => { this.next() }, 5000);
                     }
                 }" class="relative max-w-5xl mx-auto">
-                
+
                 <div class="overflow-hidden relative rounded-[3rem] shadow-2xl shadow-slate-200/50 border border-slate-100 bg-slate-50/50">
                     <div class="flex transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]" :style="'transform: translateX(-' + (activeSlide * 100) + '%)'">
                         <template x-for="(slide, index) in slides" :key="index">
@@ -551,7 +968,7 @@
                         Siap Memulai <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-400">Perjalanan Anda?</span>
                     </h2>
                     <p class="mt-6 text-xl leading-relaxed text-slate-300 max-w-2xl mx-auto font-light">
-                        Pilih kendaraan impian Anda sekarang dan nikmati diskon khusus untuk penyewaan pertama. 
+                        Pilih kendaraan impian Anda sekarang dan nikmati diskon khusus untuk penyewaan pertama.
                         Mobil siap diantar ke depan pintu Anda hari ini juga.
                     </p>
                     <div class="mt-10 flex justify-center">

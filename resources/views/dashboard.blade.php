@@ -237,8 +237,8 @@
         <!-- Documents Section -->
         <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-slate-100 mb-8">
             <div class="p-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-start sm:items-center gap-4">
                         <div class="flex-shrink-0 bg-purple-100 rounded-xl p-3">
                             <svg class="h-8 w-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2H4a1 1 0 110-2V4zm3 5a1 1 0 100 2h6a1 1 0 100-2H7z" />
@@ -249,17 +249,17 @@
                             <p class="text-sm text-slate-600 mt-1">Upload KTP dan SIM untuk verifikasi</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex flex-wrap items-center gap-3 sm:gap-2 mt-2 sm:mt-0">
                         @if($user->document)
                             @if($user->document->status === 'disetujui')
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">✓ Terverifikasi</span>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 whitespace-nowrap">✓ Terverifikasi</span>
                             @elseif($user->document->status === 'ditolak')
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">✗ Ditolak</span>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 whitespace-nowrap">✗ Ditolak</span>
                             @else
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">⏳ Pending</span>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 whitespace-nowrap">⏳ Pending</span>
                             @endif
                         @endif
-                        <a href="{{ route('documents.index') }}" class="ml-4 inline-flex items-center px-4 py-2 border border-slate-300 rounded-lg shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors">
+                        <a href="{{ route('documents.index') }}" class="inline-flex items-center px-4 py-2 border border-slate-300 rounded-lg shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 transition-colors whitespace-nowrap">
                             {{ $user->document ? 'Update Dokumen' : 'Upload Dokumen' }}
                         </a>
                     </div>
@@ -479,35 +479,42 @@
                     @foreach($recentBookings as $booking)
                         <li>
                             <a href="{{ route('bookings.show', $booking) }}" class="block hover:bg-slate-50 transition-colors">
-                                <div class="px-6 py-4 flex items-center">
-                                    <div class="min-w-0 flex-1 flex items-center">
+                                <div class="px-4 py-4 sm:px-6 flex flex-col sm:flex-row sm:items-center gap-4">
+                                    <div class="flex items-start sm:items-center gap-4 flex-1 min-w-0">
                                         <div class="flex-shrink-0 h-16 w-24 relative rounded-md overflow-hidden bg-slate-100">
                                             <img class="h-16 w-24 object-cover" src="{{ $booking->car->image_url ?? 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=300&q=80' }}" alt="">
                                         </div>
-                                        <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+                                        <div class="flex-1 min-w-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:items-center">
                                             <div>
                                                 <p class="text-sm font-bold text-sky-600 truncate">{{ $booking->car->name }}</p>
-                                                <p class="mt-2 flex items-center text-sm text-slate-500">
-                                                    <svg class="flex-shrink-0 mr-1.5 h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <p class="mt-1 flex items-center text-xs sm:text-sm text-slate-500">
+                                                    <svg class="flex-shrink-0 mr-1.5 h-4 w-4 text-slate-400 hidden sm:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                                     </svg>
                                                     <span class="truncate">{{ \Carbon\Carbon::parse($booking->start_date)->translatedFormat('d M Y') }} - {{ \Carbon\Carbon::parse($booking->end_date)->translatedFormat('d M Y') }}</span>
                                                 </p>
-                                            </div>
-                                            <div class="hidden md:block">
-                                                <div>
+                                                <div class="mt-2 sm:hidden">
                                                     <p class="text-sm text-slate-900 font-bold">
                                                         Rp {{ number_format($booking->total_price, 0, ',', '.') }}
                                                     </p>
-                                                    <p class="mt-2 flex items-center text-sm text-slate-500">
+                                                    <p class="mt-0.5 text-xs text-slate-500">
                                                         Booking ID: #{{ str_pad($booking->id, 5, '0', STR_PAD_LEFT) }}
                                                     </p>
                                                 </div>
                                             </div>
+                                            <div class="hidden sm:block">
+                                                <p class="text-sm text-slate-900 font-bold">
+                                                    Rp {{ number_format($booking->total_price, 0, ',', '.') }}
+                                                </p>
+                                                <p class="mt-1 text-xs sm:text-sm text-slate-500">
+                                                    Booking ID: #{{ str_pad($booking->id, 5, '0', STR_PAD_LEFT) }}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div>
-                                        @if($booking->status == 'pending')
+                                    <div class="flex items-center justify-between sm:justify-end pl-28 sm:pl-0">
+                                        <div>
+                                            @if($booking->status == 'pending')
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">⏳ Menunggu Review</span>
                                         @elseif($booking->status == 'menunggu pembayaran')
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">💳 Menunggu Bayar</span>
@@ -521,6 +528,166 @@
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800">✗ Dibatalkan</span>
                                         @else
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">{{ ucfirst($booking->status) }}</span>
+                                        @endif
+                                        </div>
+                                        <svg class="h-5 w-5 text-slate-400 inline ml-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+        </div>
+
+        <!-- Recent Shuttle Bookings -->
+        <div class="bg-white shadow-sm rounded-2xl border border-slate-100 overflow-hidden mt-8">
+            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center">
+                <h3 class="text-lg leading-6 font-bold text-slate-900">
+                    Pesanan Travel Shuttle Terakhir
+                </h3>
+                <a href="{{ route('bookings.index', ['tab' => 'shuttle']) }}" class="text-sm font-medium text-sky-600 hover:text-sky-500">Lihat Semua</a>
+            </div>
+
+            @if($recentShuttleBookings->isEmpty())
+                <div class="p-12 text-center">
+                    <svg class="mx-auto h-12 w-12 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                    <h3 class="mt-2 text-sm font-medium text-slate-900">Belum ada pesanan Shuttle</h3>
+                    <div class="mt-6">
+                        <a href="{{ route('shuttle.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                            Pesan Shuttle
+                        </a>
+                    </div>
+                </div>
+            @else
+                <ul class="divide-y divide-slate-100">
+                    @foreach($recentShuttleBookings as $booking)
+                        <li>
+                            <a href="{{ route('shuttle.show', $booking->booking_code) }}" class="block hover:bg-slate-50 transition-colors">
+                                <div class="px-4 py-4 sm:px-6 flex flex-col sm:flex-row sm:items-center gap-4">
+                                    <div class="flex items-start sm:items-center gap-4 flex-1 min-w-0">
+                                        <div class="flex-shrink-0 h-16 w-16 relative rounded-md overflow-hidden bg-sky-100 flex items-center justify-center">
+                                            <svg class="w-8 h-8 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                                        </div>
+                                        <div class="flex-1 min-w-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:items-center">
+                                            <div>
+                                                <p class="text-sm font-bold text-sky-600 truncate">{{ $booking->route->origin_city ?? 'Origin' }} - {{ $booking->route->destination_city ?? 'Dest' }}</p>
+                                                <p class="mt-1 flex items-center text-xs sm:text-sm text-slate-500">
+                                                    <span class="truncate">{{ \Carbon\Carbon::parse($booking->travel_date)->translatedFormat('d M Y') }}</span>
+                                                </p>
+                                                <div class="mt-2 sm:hidden">
+                                                    <p class="text-sm text-slate-900 font-bold">
+                                                        Rp {{ number_format($booking->total_price, 0, ',', '.') }}
+                                                    </p>
+                                                    <p class="mt-0.5 text-xs text-slate-500">
+                                                        Booking Code: {{ $booking->booking_code }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="hidden sm:block">
+                                                <p class="text-sm text-slate-900 font-bold">
+                                                    Rp {{ number_format($booking->total_price, 0, ',', '.') }}
+                                                </p>
+                                                <p class="mt-1 text-xs sm:text-sm text-slate-500">
+                                                    Booking Code: {{ $booking->booking_code }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between sm:justify-end pl-20 sm:pl-0">
+                                        <div>
+                                            @if($booking->payment_method && in_array($booking->payment_status, ['unpaid', 'pending']))
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">⏳ Menunggu Review</span>
+                                        @elseif(in_array($booking->payment_status, ['unpaid', 'pending']))
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">💳 Menunggu Bayar</span>
+                                        @elseif($booking->payment_status == 'paid')
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">✓ Lunas</span>
+                                        @else
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">{{ ucfirst($booking->payment_status) }}</span>
+                                        @endif
+                                        </div>
+                                        <svg class="h-5 w-5 text-slate-400 inline ml-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+        </div>
+
+        <!-- Recent Airport Bookings -->
+        <div class="bg-white shadow-sm rounded-2xl border border-slate-100 overflow-hidden mt-8">
+            <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center">
+                <h3 class="text-lg leading-6 font-bold text-slate-900">
+                    Pesanan Antar Jemput Terakhir
+                </h3>
+                <a href="{{ route('bookings.index', ['tab' => 'airport']) }}" class="text-sm font-medium text-sky-600 hover:text-sky-500">Lihat Semua</a>
+            </div>
+
+            @if($recentAirportBookings->isEmpty())
+                <div class="p-12 text-center">
+                    <svg class="mx-auto h-12 w-12 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                    <h3 class="mt-2 text-sm font-medium text-slate-900">Belum ada pesanan Antar Jemput</h3>
+                    <div class="mt-6">
+                        <a href="{{ route('airport-transfer') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                            Pesan Antar Jemput
+                        </a>
+                    </div>
+                </div>
+            @else
+                <ul class="divide-y divide-slate-100">
+                    @foreach($recentAirportBookings as $booking)
+                        <li>
+                            <a href="{{ route('airport-transfer.show', $booking->booking_code) }}" class="block hover:bg-slate-50 transition-colors">
+                                <div class="px-4 py-4 sm:px-6 flex flex-col sm:flex-row sm:items-center gap-4">
+                                    <div class="flex items-start sm:items-center gap-4 flex-1 min-w-0">
+                                        <div class="flex-shrink-0 h-16 w-16 relative rounded-md overflow-hidden bg-indigo-100 flex items-center justify-center">
+                                            <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path></svg>
+                                        </div>
+                                        <div class="flex-1 min-w-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:items-center">
+                                            <div>
+                                                <p class="text-sm font-bold text-indigo-600 truncate">{{ $booking->type === 'to_airport' ? 'Ke Bandara' : 'Dari Bandara' }}</p>
+                                                <p class="mt-1 flex items-center text-xs sm:text-sm text-slate-500">
+                                                    <span class="truncate">{{ \Carbon\Carbon::parse($booking->pickup_date)->translatedFormat('d M Y') }} - {{ \Carbon\Carbon::parse($booking->pickup_time)->format('H:i') }}</span>
+                                                </p>
+                                                <div class="mt-2 sm:hidden">
+                                                    <p class="text-sm text-slate-900 font-bold">
+                                                        Rp {{ number_format($booking->total_price, 0, ',', '.') }}
+                                                    </p>
+                                                    <p class="mt-0.5 text-xs text-slate-500">
+                                                        Booking Code: {{ $booking->booking_code }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="hidden sm:block">
+                                                <p class="text-sm text-slate-900 font-bold">
+                                                    Rp {{ number_format($booking->total_price, 0, ',', '.') }}
+                                                </p>
+                                                <p class="mt-1 text-xs sm:text-sm text-slate-500">
+                                                    Booking Code: {{ $booking->booking_code }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between sm:justify-end pl-20 sm:pl-0">
+                                        <div>
+                                            @if($booking->payment_method && in_array($booking->payment_status, ['unpaid', 'pending']))
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">⏳ Menunggu Review</span>
+                                        @elseif(in_array($booking->payment_status, ['unpaid', 'pending']))
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">💳 Menunggu Bayar</span>
+                                        @elseif($booking->payment_status == 'paid')
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">✓ Lunas</span>
+                                        @else
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">{{ ucfirst($booking->payment_status) }}</span>
                                         @endif
                                         <svg class="h-5 w-5 text-slate-400 inline ml-2" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />

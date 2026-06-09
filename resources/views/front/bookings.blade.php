@@ -1,10 +1,27 @@
 <x-front-layout>
-    <div class="bg-slate-50 min-h-screen py-12">
+    <div class="bg-slate-50 min-h-screen py-12" x-data="{ activeTab: '{{ request('tab', 'cars') }}' }">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div class="mb-8">
-                <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">📋 Riwayat Pesanan</h1>
-                <p class="mt-2 text-slate-500">Pantau status penyewaan kendaraan Anda di sini.</p>
+            <div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div>
+                    <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">📋 Riwayat Pesanan</h1>
+                    <p class="mt-2 text-slate-500">Pantau status penyewaan kendaraan Anda di sini.</p>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="mb-6 border-b border-slate-200">
+                <nav class="-mb-px flex space-x-8 overflow-x-auto" aria-label="Tabs">
+                    <button @click="activeTab = 'cars'" :class="{'border-sky-500 text-sky-600': activeTab === 'cars', 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300': activeTab !== 'cars'}" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                        Sewa Mobil
+                    </button>
+                    <button @click="activeTab = 'shuttle'" :class="{'border-sky-500 text-sky-600': activeTab === 'shuttle', 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300': activeTab !== 'shuttle'}" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                        Travel Shuttle
+                    </button>
+                    <button @click="activeTab = 'airport'" :class="{'border-sky-500 text-sky-600': activeTab === 'airport', 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300': activeTab !== 'airport'}" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors">
+                        Antar Jemput Bandara
+                    </button>
+                </nav>
             </div>
 
             @if(session('success'))
@@ -20,7 +37,8 @@
                 </div>
             @endif
 
-            <div class="bg-white shadow-xl shadow-slate-200/40 rounded-3xl overflow-hidden border border-slate-100">
+            <!-- Cars Tab -->
+            <div x-show="activeTab === 'cars'" class="bg-white shadow-xl shadow-slate-200/40 rounded-3xl overflow-hidden border border-slate-100">
                 <ul role="list" class="divide-y divide-slate-100">
                     @forelse($bookings as $booking)
                         <li class="p-6 hover:bg-slate-50 transition-colors">
@@ -154,6 +172,133 @@
                     @endforelse
                 </ul>
             </div>
+
+            <!-- Shuttle Tab -->
+            <div x-show="activeTab === 'shuttle'" x-cloak class="bg-white shadow-xl shadow-slate-200/40 rounded-3xl overflow-hidden border border-slate-100">
+                <ul role="list" class="divide-y divide-slate-100">
+                    @forelse($shuttleBookings as $booking)
+                        <li class="p-6 hover:bg-slate-50 transition-colors">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-6">
+                                <div class="flex items-start sm:items-center gap-4 flex-1 min-w-0">
+                                    <div class="flex-shrink-0 h-16 w-16 relative rounded-md overflow-hidden bg-sky-100 flex items-center justify-center">
+                                        <svg class="w-8 h-8 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-lg font-bold text-slate-900 truncate">{{ $booking->route->origin_city ?? 'Origin' }} - {{ $booking->route->destination_city ?? 'Dest' }}</p>
+                                        <p class="mt-1 flex items-center text-sm text-slate-500">
+                                            <span class="truncate">Tanggal Berangkat: <span class="font-medium text-slate-700">{{ \Carbon\Carbon::parse($booking->travel_date)->translatedFormat('d M Y') }}</span></span>
+                                        </p>
+                                        <p class="mt-1 text-sm text-slate-500">
+                                            Booking Code: <span class="font-bold text-slate-700">{{ $booking->booking_code }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-start sm:items-end gap-3 sm:pl-0">
+                                    <div class="text-left sm:text-right">
+                                        <p class="text-xs text-slate-500 font-medium">Total Pembayaran</p>
+                                        <p class="text-xl font-black text-slate-900">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</p>
+                                    </div>
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        @if($booking->payment_method && in_array($booking->payment_status, ['unpaid', 'pending']))
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-800 uppercase tracking-wider">⏳ Menunggu Review</span>
+                                        @elseif(in_array($booking->payment_status, ['unpaid', 'pending']))
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 uppercase tracking-wider">💳 Menunggu Bayar</span>
+                                        @elseif($booking->payment_status == 'paid')
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 uppercase tracking-wider">✓ Lunas</span>
+                                        @else
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 uppercase tracking-wider">{{ ucfirst($booking->payment_status) }}</span>
+                                        @endif
+
+                                        <a href="{{ route('shuttle.show', $booking->booking_code) }}" class="text-sm font-bold text-slate-600 hover:text-sky-600 bg-white border border-slate-200 px-3 py-1.5 rounded-lg hover:border-sky-300 transition-colors">
+                                            📖 Detail
+                                        </a>
+                                        @if(in_array($booking->payment_status, ['unpaid', 'pending']) && !$booking->payment_method)
+                                            <a href="{{ route('shuttle.payment', $booking->booking_code) }}" class="text-sm font-bold text-white bg-sky-600 hover:bg-sky-700 px-3 py-1.5 rounded-lg transition-colors">
+                                                💳 Bayar
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    @empty
+                        <li class="px-6 py-16 text-center">
+                            <div class="w-20 h-20 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-4 text-sky-400">
+                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-1">Belum Ada Pesanan Travel Shuttle</h3>
+                            <p class="text-slate-500 mb-6">Anda belum pernah memesan tiket travel shuttle.</p>
+                            <a href="{{ route('shuttle.index') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-bold rounded-xl text-white bg-sky-600 hover:bg-sky-700 shadow-lg transition-colors">
+                                🚐 Cari Tiket Shuttle
+                            </a>
+                        </li>
+                    @endforelse
+                </ul>
+            </div>
+
+            <!-- Airport Tab -->
+            <div x-show="activeTab === 'airport'" x-cloak class="bg-white shadow-xl shadow-slate-200/40 rounded-3xl overflow-hidden border border-slate-100">
+                <ul role="list" class="divide-y divide-slate-100">
+                    @forelse($airportBookings as $booking)
+                        <li class="p-6 hover:bg-slate-50 transition-colors">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-6">
+                                <div class="flex items-start sm:items-center gap-4 flex-1 min-w-0">
+                                    <div class="flex-shrink-0 h-16 w-16 relative rounded-md overflow-hidden bg-indigo-100 flex items-center justify-center">
+                                        <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path></svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-lg font-bold text-slate-900 truncate">{{ $booking->type === 'to_airport' ? 'Ke Bandara' : 'Dari Bandara' }}</p>
+                                        <p class="mt-1 flex items-center text-sm text-slate-500">
+                                            <span class="truncate">Waktu: <span class="font-medium text-slate-700">{{ \Carbon\Carbon::parse($booking->pickup_date)->translatedFormat('d M Y') }} - {{ \Carbon\Carbon::parse($booking->pickup_time)->format('H:i') }}</span></span>
+                                        </p>
+                                        <p class="mt-1 text-sm text-slate-500">
+                                            Booking Code: <span class="font-bold text-slate-700">{{ $booking->booking_code }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-start sm:items-end gap-3 sm:pl-0">
+                                    <div class="text-left sm:text-right">
+                                        <p class="text-xs text-slate-500 font-medium">Total Pembayaran</p>
+                                        <p class="text-xl font-black text-slate-900">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</p>
+                                    </div>
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        @if($booking->payment_method && in_array($booking->payment_status, ['unpaid', 'pending']))
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-800 uppercase tracking-wider">⏳ Menunggu Review</span>
+                                        @elseif(in_array($booking->payment_status, ['unpaid', 'pending']))
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 uppercase tracking-wider">💳 Menunggu Bayar</span>
+                                        @elseif($booking->payment_status == 'paid')
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 uppercase tracking-wider">✓ Lunas</span>
+                                        @else
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 uppercase tracking-wider">{{ ucfirst($booking->payment_status) }}</span>
+                                        @endif
+
+                                        <a href="{{ route('airport-transfer.show', $booking->booking_code) }}" class="text-sm font-bold text-slate-600 hover:text-sky-600 bg-white border border-slate-200 px-3 py-1.5 rounded-lg hover:border-sky-300 transition-colors">
+                                            📖 Detail
+                                        </a>
+                                        @if(in_array($booking->payment_status, ['unpaid', 'pending']) && !$booking->payment_method)
+                                            <a href="{{ route('airport-transfer.payment', $booking->booking_code) }}" class="text-sm font-bold text-white bg-sky-600 hover:bg-sky-700 px-3 py-1.5 rounded-lg transition-colors">
+                                                💳 Bayar
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    @empty
+                        <li class="px-6 py-16 text-center">
+                            <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4 text-indigo-400">
+                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"></path></svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-1">Belum Ada Pesanan Antar Jemput</h3>
+                            <p class="text-slate-500 mb-6">Anda belum pernah memesan layanan antar jemput bandara.</p>
+                            <a href="{{ route('airport-transfer') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 shadow-lg transition-colors">
+                                ✈️ Pesan Antar Jemput
+                            </a>
+                        </li>
+                    @endforelse
+                </ul>
+            </div>
+
         </div>
     </div>
 </x-front-layout>

@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0284c7">
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:300,400,500,600,700,800&display=swap" rel="stylesheet" />
@@ -39,7 +39,19 @@
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-1 lg:space-x-2">
                     <a href="{{ route('home') }}" class="px-4 py-2.5 rounded-full text-sm font-bold {{ request()->routeIs('home') ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-sky-50 hover:text-sky-600' }} transition-all duration-300">Beranda</a>
-                    <a href="{{ route('cars.index') }}" class="px-4 py-2.5 rounded-full text-sm font-bold {{ request()->routeIs('cars.*') ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-sky-50 hover:text-sky-600' }} transition-all duration-300">Mobil Kami</a>
+                    <div class="relative group" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                        <button class="px-4 py-2.5 rounded-full text-sm font-bold {{ request()->routeIs('cars.*', 'airport-transfer*', 'shuttle.*') ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-sky-50 hover:text-sky-600' }} transition-all duration-300 flex items-center gap-1">
+                            Layanan Kami
+                            <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2" class="absolute left-0 mt-1 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50" style="display: none;">
+                            <div class="p-2 space-y-1">
+                                <a href="{{ route('cars.index') }}" class="block px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 hover:bg-sky-50 hover:text-sky-600 transition-colors">Sewa Mobil (Harian/Bulanan)</a>
+                                <a href="{{ route('airport-transfer') }}" class="flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 hover:bg-sky-50 hover:text-sky-600 transition-colors">Antar Jemput Bandara <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 text-sky-600 uppercase tracking-wider">Baru</span></a>
+                                <a href="{{ route('shuttle.index') }}" class="flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 hover:bg-sky-50 hover:text-sky-600 transition-colors">Travel Shuttle <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 text-sky-600 uppercase tracking-wider">Baru</span></a>
+                            </div>
+                        </div>
+                    </div>
                     <a href="{{ route('cabang.index') }}" class="px-4 py-2.5 rounded-full text-sm font-bold {{ request()->routeIs('cabang.*') ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-sky-50 hover:text-sky-600' }} transition-all duration-300">Cabang</a>
                     <a href="{{ route('about') }}" class="px-4 py-2.5 rounded-full text-sm font-bold {{ request()->routeIs('about') ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-sky-50 hover:text-sky-600' }} transition-all duration-300">Tentang Kami</a>
                     <a href="{{ route('faq') }}" class="px-4 py-2.5 rounded-full text-sm font-bold {{ request()->routeIs('faq') ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-sky-50 hover:text-sky-600' }} transition-all duration-300">FAQ</a>
@@ -53,7 +65,7 @@
                         <a href="{{ route('wishlist') }}" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 border border-slate-200 text-slate-600 hover:bg-rose-50 hover:text-rose-500 hover:border-rose-200 shadow-sm hover:shadow-md transition-all duration-300" title="Wishlist">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                         </a>
-                        
+
                         <!-- Notifications -->
                         <div class="relative" x-data="{ notifOpen: false }">
                             <button @click="notifOpen = !notifOpen" class="relative w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 border border-slate-200 text-slate-600 hover:bg-sky-50 hover:text-sky-600 hover:border-sky-200 shadow-sm hover:shadow-md transition-all duration-300">
@@ -158,12 +170,22 @@
             <div x-show="mobileMenuOpen" x-collapse class="md:hidden mt-2 mb-4 bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-slate-200/50 overflow-y-auto max-h-[calc(100vh-5rem)]" style="display: none;">
                 <div class="px-4 py-6 space-y-2">
                     <a href="{{ route('home') }}" class="block px-5 py-3.5 rounded-2xl text-base font-bold {{ request()->routeIs('home') ? 'text-white bg-slate-900 shadow-md' : 'text-slate-600 hover:bg-slate-50 hover:text-sky-600' }} transition-all">Beranda</a>
-                    <a href="{{ route('cars.index') }}" class="block px-5 py-3.5 rounded-2xl text-base font-bold {{ request()->routeIs('cars.*') ? 'text-white bg-slate-900 shadow-md' : 'text-slate-600 hover:bg-slate-50 hover:text-sky-600' }} transition-all">Mobil Kami</a>
+                    <div x-data="{ dropdownOpen: false }" class="space-y-1">
+                        <button @click="dropdownOpen = !dropdownOpen" class="w-full flex items-center justify-between px-5 py-3.5 rounded-2xl text-base font-bold {{ request()->routeIs('cars.*', 'airport-transfer*', 'shuttle.*') ? 'text-white bg-slate-900 shadow-md' : 'text-slate-600 hover:bg-slate-50 hover:text-sky-600' }} transition-all">
+                            Layanan Kami
+                            <svg class="w-5 h-5 transition-transform duration-200" :class="{'rotate-180': dropdownOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div x-show="dropdownOpen" x-collapse class="pl-4 space-y-1 mt-1" style="display: none;">
+                            <a href="{{ route('cars.index') }}" class="block px-5 py-3 rounded-2xl text-sm font-bold text-slate-600 hover:bg-slate-50 hover:text-sky-600 transition-all">Sewa Mobil (Harian/Bulanan)</a>
+                            <a href="{{ route('airport-transfer') }}" class="flex items-center justify-between px-5 py-3 rounded-2xl text-sm font-bold text-slate-600 hover:bg-slate-50 hover:text-sky-600 transition-all">Antar Jemput Bandara <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 text-sky-600 uppercase tracking-wider">Baru</span></a>
+                            <a href="{{ route('shuttle.index') }}" class="flex items-center justify-between px-5 py-3 rounded-2xl text-sm font-bold text-slate-600 hover:bg-slate-50 hover:text-sky-600 transition-all">Travel Shuttle <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 text-sky-600 uppercase tracking-wider">Baru</span></a>
+                        </div>
+                    </div>
                     <a href="{{ route('cabang.index') }}" class="block px-5 py-3.5 rounded-2xl text-base font-bold {{ request()->routeIs('cabang.*') ? 'text-white bg-slate-900 shadow-md' : 'text-slate-600 hover:bg-slate-50 hover:text-sky-600' }} transition-all">Cabang</a>
                     <a href="{{ route('about') }}" class="block px-5 py-3.5 rounded-2xl text-base font-bold {{ request()->routeIs('about') ? 'text-white bg-slate-900 shadow-md' : 'text-slate-600 hover:bg-slate-50 hover:text-sky-600' }} transition-all">Tentang Kami</a>
                     <a href="{{ route('faq') }}" class="block px-5 py-3.5 rounded-2xl text-base font-bold {{ request()->routeIs('faq') ? 'text-white bg-slate-900 shadow-md' : 'text-slate-600 hover:bg-slate-50 hover:text-sky-600' }} transition-all">FAQ</a>
                     <a href="{{ route('contact') }}" class="block px-5 py-3.5 rounded-2xl text-base font-bold {{ request()->routeIs('contact') ? 'text-white bg-slate-900 shadow-md' : 'text-slate-600 hover:bg-slate-50 hover:text-sky-600' }} transition-all">Kontak</a>
-                    
+
                     <div class="border-t border-slate-100 mt-6 pt-6">
                         @auth
                             <div class="px-5 mb-4 text-sm text-slate-500 flex items-center gap-3">
@@ -271,6 +293,7 @@
                         <li><a href="{{ route('privacy') }}" class="text-sm text-slate-400 hover:text-sky-400 transition-colors">Kebijakan Privasi</a></li>
                         <li><a href="{{ route('terms') }}" class="text-sm text-slate-400 hover:text-sky-400 transition-colors">Syarat & Ketentuan</a></li>
                         <li><a href="{{ route('validation.form') }}" class="text-sm text-slate-400 hover:text-sky-400 transition-colors">Validasi Dokumen</a></li>
+                        <li><a href="{{ route('bug-report') }}" class="text-sm text-slate-400 hover:text-sky-400 transition-colors">Laporan Bug</a></li>
                     </ul>
                 </div>
 
@@ -281,7 +304,8 @@
                         <li><a href="{{ route('cars.index') }}" class="text-sm text-slate-400 hover:text-sky-400 transition-colors">Sewa Harian</a></li>
                         <li><a href="{{ route('cars.index') }}" class="text-sm text-slate-400 hover:text-sky-400 transition-colors">Sewa Bulanan</a></li>
                         <li><a href="{{ route('cars.index') }}" class="text-sm text-slate-400 hover:text-sky-400 transition-colors">Sewa Lepas Kunci</a></li>
-                        <li><a href="#" class="text-sm text-slate-400 hover:text-sky-400 transition-colors">Antar Jemput Bandara</a></li>
+                        <li><a href="{{ route('airport-transfer') }}" class="text-sm text-slate-400 hover:text-sky-400 transition-colors">Antar Jemput Bandara</a></li>
+                        <li><a href="{{ route('shuttle.index') }}" class="text-sm text-slate-400 hover:text-sky-400 transition-colors">Travel Shuttle <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-sky-500/10 text-sky-400 uppercase tracking-wider">Baru</span></a></li>
                     </ul>
                 </div>
                 <!-- Kontak -->
@@ -311,7 +335,7 @@
                     </ul>
                 </div>
             </div>
-            
+
             <div class="border-t border-slate-800 pt-8 mt-8 flex flex-col lg:flex-row justify-between items-center gap-6">
                 <!-- Copyright & Links -->
                 <div class="flex flex-col md:flex-row items-center gap-4 md:gap-6">
